@@ -1,10 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import text
+
+from app.database.database import engine
 
 app = FastAPI(
     title="AI Research Workspace API",
-    description="Backend API for AI Research Workspace",
-    version="1.0.0"
+    version="1.0.0",
 )
 
 origins = [
@@ -19,8 +21,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/")
 def root():
     return {
         "message": "AI Research Workspace Backend is Running 🚀"
+    }
+
+
+@app.get("/health/db")
+def database_health():
+    with engine.connect() as connection:
+        connection.execute(text("SELECT 1"))
+
+    return {
+        "status": "Database Connected ✅"
     }
