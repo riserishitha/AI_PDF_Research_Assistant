@@ -23,3 +23,7 @@ def create_user(db: Session, user: UserCreate):
     db.refresh(db_user)
 
     return db_user
+
+
+def authenticate_user(db: Session, email: str):
+    return db.query(User).filter(User.email == email).first()
