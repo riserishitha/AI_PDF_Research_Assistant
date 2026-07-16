@@ -1,5 +1,5 @@
 import uuid
-
+from sqlalchemy import Text
 from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
@@ -51,6 +51,10 @@ class Document(Base):
         ForeignKey("projects.id", ondelete="CASCADE"),
         nullable=False,
     )
+    extracted_text = Column(
+    Text,
+    nullable=True,
+)
 
     created_at = Column(
         DateTime(timezone=True),
@@ -61,3 +65,12 @@ class Document(Base):
         "Project",
         back_populates="documents",
     )
+
+
+
+
+
+
+
+
+
