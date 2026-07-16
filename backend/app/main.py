@@ -2,8 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from app.api.v1.auth import router as auth_router
-
+from app.api.v1.projects import router as project_router
 from app.database.database import engine
+from app.api.v1.documents import router as document_router
 
 app = FastAPI(
     title="AI Research Workspace API",
@@ -13,6 +14,11 @@ app.include_router(auth_router, prefix="/api/v1")
 origins = [
     "http://localhost:5173",
 ]
+
+app.include_router(
+    document_router,
+    prefix="/api/v1",
+)
 
 app.add_middleware(
     CORSMiddleware,
