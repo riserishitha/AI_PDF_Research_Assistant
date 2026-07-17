@@ -6,7 +6,8 @@ from fastapi import File
 from fastapi import HTTPException
 from fastapi import UploadFile
 from sqlalchemy.orm import Session
-
+from app.services.chunk_service import split_text
+from app.crud.document_chunk import create_chunks
 from app.core.dependencies import get_current_user
 from app.crud.document import create_document
 from app.crud.project import get_project
@@ -70,14 +71,24 @@ def upload_document(
     print("=" * 60)
 
     document = create_document(
-        db=db,
-        original_name=saved_file["original_name"],
-        stored_name=saved_file["stored_name"],
-        file_type=saved_file["file_type"],
-        file_size=saved_file["file_size"],
-        file_path=saved_file["file_path"],
-        project_id=project.id,
-        extracted_text=extracted_text,
+    db=db,
+    original_name=saved_file["original_name"],
+    stored_name=saved_file["stored_name"],
+    file_type=saved_file["file_type"],
+    file_size=saved_file["file_size"],
+    file_path=saved_file["file_path"],
+    project_id=project.id,
+    extracted_text=extracted_text,
     )
+
+    chunks = split_text(extracted_text)
+
+    create_chunks(
+        db=db,
+        document_id=document.id,
+        chunks=chunks,
+    )
+
+    print(f"Created {len(chunks)} chunks")
 
     return document
