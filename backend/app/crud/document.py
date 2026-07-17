@@ -28,33 +28,3 @@ def create_document(
     db.refresh(document)
 
     return document
-
-
-def get_project_documents(
-    db: Session,
-    project_id,
-):
-    return (
-        db.query(Document)
-        .filter(Document.project_id == project_id)
-        .all()
-    )
-
-
-def get_document(
-    db: Session,
-    document_id,
-):
-    return (
-        db.query(Document)
-        .filter(Document.id == document_id)
-        .first()
-    )
-
-
-def delete_document(
-    db: Session,
-    document: Document,
-):
-    db.delete(document)
-    db.commit()

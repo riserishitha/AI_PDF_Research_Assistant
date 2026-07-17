@@ -3,24 +3,34 @@ from sqlalchemy.orm import Session
 from app.models.document_chunk import DocumentChunk
 
 
-def create_chunks(
+def create_document_chunk(
     db: Session,
     document_id,
-    chunks,
+    chunk_index: int,
+    content: str,
 ):
-    db_chunks = []
+    chunk = DocumentChunk(
+        document_id=document_id,
+        chunk_index=chunk_index,
+        content=content,
+    )
 
+    db.add(chunk)
+
+    return chunk
+
+
+def create_document_chunks(
+    db: Session,
+    document_id,
+    chunks: list[str],
+):
     for index, chunk in enumerate(chunks):
-
-        db_chunk = DocumentChunk(
+        create_document_chunk(
+            db=db,
             document_id=document_id,
             chunk_index=index,
             content=chunk,
         )
 
-        db.add(db_chunk)
-        db_chunks.append(db_chunk)
-
     db.commit()
-
-    return db_chunks
