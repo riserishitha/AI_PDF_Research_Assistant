@@ -1,13 +1,15 @@
 import uuid
-from sqlalchemy import Text
+
 from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy import Text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
+
 from app.models.base import Base
 
 
@@ -50,14 +52,10 @@ class Document(Base):
         ForeignKey("projects.id", ondelete="CASCADE"),
         nullable=False,
     )
+
     extracted_text = Column(
-    Text,
-    nullable=True,
-    )
-    chunks = relationship(
-    "DocumentChunk",
-    back_populates="document",
-    cascade="all, delete-orphan",
+        Text,
+        nullable=True,
     )
 
     created_at = Column(
@@ -70,11 +68,8 @@ class Document(Base):
         back_populates="documents",
     )
 
-
-
-
-
-
-
-
-
+    chunks = relationship(
+        "DocumentChunk",
+        back_populates="document",
+        cascade="all, delete-orphan",
+    )

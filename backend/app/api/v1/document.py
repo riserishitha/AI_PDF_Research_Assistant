@@ -1,5 +1,4 @@
 from uuid import UUID
-
 from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import File
@@ -7,7 +6,7 @@ from fastapi import HTTPException
 from fastapi import UploadFile
 from sqlalchemy.orm import Session
 from app.services.chunk_service import split_text
-from app.crud.document_chunk import create_chunks
+from app.crud.document_chunk import create_document_chunks
 from app.core.dependencies import get_current_user
 from app.crud.document import create_document
 from app.crud.project import get_project
@@ -83,7 +82,7 @@ def upload_document(
 
     chunks = split_text(extracted_text)
 
-    create_chunks(
+    create_document_chunks(
         db=db,
         document_id=document.id,
         chunks=chunks,
