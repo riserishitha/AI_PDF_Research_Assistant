@@ -8,7 +8,6 @@ from sqlalchemy import String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-
 from app.models.base import Base
 
 
@@ -54,7 +53,12 @@ class Document(Base):
     extracted_text = Column(
     Text,
     nullable=True,
-)
+    )
+    chunks = relationship(
+    "DocumentChunk",
+    back_populates="document",
+    cascade="all, delete-orphan",
+    )
 
     created_at = Column(
         DateTime(timezone=True),
