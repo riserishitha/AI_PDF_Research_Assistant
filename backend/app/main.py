@@ -6,7 +6,7 @@ from app.api.v1.projects import router as project_router
 from app.database.database import engine
 from app.api.v1.document import router as document_router
 from app.api.v1 import api_router
-
+from app.api.v1.search import router as search_router
 app = FastAPI(
     title="AI Research Workspace API",
     version="1.0.0",
@@ -28,7 +28,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
+app.include_router(
+    search_router,
+    prefix="/api/v1",
+)
 
 @app.get("/")
 def root():
