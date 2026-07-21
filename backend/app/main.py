@@ -7,6 +7,7 @@ from app.database.database import engine
 from app.api.v1.document import router as document_router
 from app.api.v1 import api_router
 from app.api.v1.search import router as search_router
+from app.api.v1.chat import router as chat_router
 app = FastAPI(
     title="AI Research Workspace API",
     version="1.0.0",
@@ -30,6 +31,10 @@ app.add_middleware(
 )
 app.include_router(
     search_router,
+    prefix="/api/v1",
+)
+app.include_router(
+    chat_router,
     prefix="/api/v1",
 )
 
