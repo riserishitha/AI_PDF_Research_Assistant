@@ -15,7 +15,7 @@ from app.crud.search import get_project_chunks
 from app.services.search_service import find_similar_chunks
 
 from app.services.llm_service import ask_llm
-
+from app.crud.chat import create_chat
 router = APIRouter(
     prefix="/chat",
     tags=["Chat"],
@@ -43,6 +43,18 @@ def chat(
     )
 
     # Step 4: Ask the LLM with the question and context
-    answer = ask_llm(request.question, context)
+    answer = ask_llm(
+        request.question,
+        context,
+    )
 
-    return ChatResponse(answer=answer)
+    create_chat(
+        db=db,
+        project_id=project_id,
+        question=request.question,
+        answer=answer,
+    )
+
+    return ChatResponse(
+        answer=answer,
+    )
