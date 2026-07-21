@@ -16,6 +16,10 @@ from app.services.search_service import find_similar_chunks
 
 from app.services.llm_service import ask_llm
 from app.crud.chat import create_chat
+
+from typing import List
+from app.crud.chat import get_project_chats
+from app.schemas.chat import ChatHistoryResponse
 router = APIRouter(
     prefix="/chat",
     tags=["Chat"],
@@ -57,4 +61,18 @@ def chat(
 
     return ChatResponse(
         answer=answer,
+    )
+
+@router.get(
+    "/{project_id}/history",
+    response_model=List[ChatHistoryResponse],
+)
+def get_chat_history(
+    project_id: UUID,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return get_project_chats(
+        db,
+        project_id,
     )
