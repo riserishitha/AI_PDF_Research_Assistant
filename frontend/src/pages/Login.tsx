@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../services/authService";
+import { saveToken } from "../utils/auth";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -18,13 +19,9 @@ export default function Login() {
         email,
         password,
       });
+    saveToken(data.access_token);
 
-      localStorage.setItem(
-        "token",
-        data.access_token
-      );
-
-      navigate("/dashboard");
+    navigate("/dashboard");
     } catch (err) {
       console.error(err);
       alert("Invalid credentials");

@@ -1,8 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Project from "./pages/Project";
+
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -20,12 +23,20 @@ function App() {
 
         <Route
           path="/dashboard"
-          element={<Dashboard />}
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
         />
 
         <Route
           path="/project/:projectId"
-          element={<Project />}
+          element={
+            <ProtectedRoute>
+              <Project />
+            </ProtectedRoute>
+          }
         />
       </Routes>
     </BrowserRouter>
