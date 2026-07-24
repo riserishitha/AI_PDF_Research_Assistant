@@ -4,15 +4,17 @@ import { useNavigate } from "react-router-dom";
 import Layout from "../components/layout/Layout";
 import Header from "../components/layout/Header";
 import Button from "../components/common/Button";
-import ProjectCard from "../projects/ProjectCard";
+
+import ProjectCard from "../project/ProjectCard";
+import CreateProjectModal from "../project/CreateProjectModal";
 
 import { getProjects } from "../services/projectService";
+
 import type { Project } from "../types/project";
 
 export default function Dashboard() {
-
-  const [projects, setProjects] =
-    useState<Project[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [openModal, setOpenModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -31,13 +33,10 @@ export default function Dashboard() {
 
   return (
     <Layout>
-
       <Header />
 
       <div className="max-w-7xl mx-auto px-8 py-10">
-
         <div className="flex justify-between items-center">
-
           <div>
             <h2 className="text-4xl font-bold">
               Welcome Back 👋
@@ -48,23 +47,22 @@ export default function Dashboard() {
             </p>
           </div>
 
-          <Button>
+          <Button onClick={() => setOpenModal(true)}>
             + New Project
           </Button>
-
         </div>
 
         <div
           className="
-          grid
-          grid-cols-1
-          md:grid-cols-2
-          xl:grid-cols-3
-          gap-8
-          mt-10
+            grid
+            grid-cols-1
+            md:grid-cols-2
+            xl:grid-cols-3
+            gap-8
+            mt-10
           "
         >
-          {projects.map(project => (
+          {projects.map((project) => (
             <ProjectCard
               key={project.id}
               project={project}
@@ -74,9 +72,13 @@ export default function Dashboard() {
             />
           ))}
         </div>
-
       </div>
 
+      <CreateProjectModal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        onSuccess={loadProjects}
+      />
     </Layout>
   );
 }
