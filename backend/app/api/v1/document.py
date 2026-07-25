@@ -15,12 +15,38 @@ from app.models.user import User
 from app.schemas.document import DocumentResponse
 from app.services.file_service import extract_text_from_pdf
 from app.services.file_service import save_pdf
+from app.crud.document import get_project_documents
+from typing import List
 
 router = APIRouter(
     prefix="/documents",
     tags=["Documents"],
 )
+@router.get(
+    "/project/{project_id}",
+    response_model=List[DocumentResponse],
+)
+def list_documents(
+    project_id: UUID,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    project = get_project(
+        db,
+        project_id,
+        current_user.id,
+    )
 
+    if not project:
+        raise HTTPException(
+            status_code=404,
+            detail="Project not found",
+        )
+
+    return get_project_documents(
+        db,
+        project_id,
+    )
 
 @router.post(
     "/upload/{project_id}",

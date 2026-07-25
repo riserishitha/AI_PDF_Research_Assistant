@@ -25,7 +25,9 @@ export default function Project() {
 
           <div className="space-y-6">
 
-            <UploadSection />
+            <UploadSection
+    onUploadSuccess={() => {}}
+/>
 
             <DocumentList />
 

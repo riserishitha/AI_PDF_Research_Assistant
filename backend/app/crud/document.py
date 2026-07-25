@@ -28,3 +28,15 @@ def create_document(
     db.refresh(document)
 
     return document
+
+
+def get_project_documents(
+    db: Session,
+    project_id,
+):
+    return (
+        db.query(Document)
+        .filter(Document.project_id == project_id)
+        .order_by(Document.created_at.desc())
+        .all()
+    )
