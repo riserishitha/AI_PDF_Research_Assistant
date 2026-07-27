@@ -17,6 +17,10 @@ from app.services.file_service import extract_text_from_pdf
 from app.services.file_service import save_pdf
 from app.crud.document import get_project_documents
 from typing import List
+from app.crud.document import (
+    get_document_by_id,
+    delete_document,
+)
 
 router = APIRouter(
     prefix="/documents",
@@ -117,3 +121,40 @@ def upload_document(
     print(f"Created {len(chunks)} chunks")
 
     return document
+@router.delete("/{document_id}")
+def remove_document(
+    document_id: UUID,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    document = get_document_by_id(
+        db,
+        document_id,
+    )
+
+    if not document:
+        raise HTTPException(
+            status_code=404,
+            detail="Document not found",
+        )
+
+    project = get_project(
+        db,
+        document.project_id,
+        current_user.id,
+    )
+
+    if not project:
+        raise HTTPException(
+            status_code=403,
+            detail="Not authorized",
+        )
+
+    delete_document(
+        db,
+        document,
+    )
+
+    return {
+        "message": "Document deleted successfully"
+    }

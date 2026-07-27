@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-
+import os
 from app.models.document import Document
 
 
@@ -40,3 +40,23 @@ def get_project_documents(
         .order_by(Document.created_at.desc())
         .all()
     )
+def get_document_by_id(
+    db: Session,
+    document_id,
+):
+    return (
+        db.query(Document)
+        .filter(Document.id == document_id)
+        .first()
+    )
+
+def delete_document(
+    db: Session,
+    document,
+):
+    if os.path.exists(document.file_path):
+        os.remove(document.file_path)
+
+    db.delete(document)
+    db.commit()
+

@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
 import Layout from "../components/layout/Layout";
 import Header from "../components/layout/Header";
 
@@ -6,7 +9,29 @@ import DocumentList from "../project/DocumentList";
 import ChatBox from "../project/ChatBox";
 import ChatInput from "../project/ChatInput";
 
+import { getDocuments } from "../services/documentService";
+import type { Document } from "../types/document";
+
 export default function Project() {
+  const { projectId } = useParams();
+
+  const [documents, setDocuments] = useState<Document[]>([]);
+
+  useEffect(() => {
+    loadDocuments();
+  }, [projectId]);
+
+  async function loadDocuments() {
+    if (!projectId) return;
+
+    try {
+      const data = await getDocuments(projectId);
+      setDocuments(data);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return (
     <Layout>
       <Header />
@@ -26,10 +51,12 @@ export default function Project() {
           <div className="space-y-6">
 
             <UploadSection
-    onUploadSuccess={() => {}}
-/>
+              onUploadSuccess={loadDocuments}
+            />
 
-            <DocumentList />
+            <DocumentList
+              documents={documents}
+            />
 
           </div>
 
