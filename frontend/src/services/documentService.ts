@@ -30,3 +30,11 @@ export const getDocuments = async (
 
   return response.data;
 };
+
+export const deleteDocument = async (
+  documentId: string
+) => {
+  await api.delete(
+    `/documents/${documentId}`
+  );
+};
