@@ -55,8 +55,9 @@ export default function Project() {
             />
 
             <DocumentList
-              documents={documents}
-            />
+  documents={documents}
+  onDelete={loadDocuments}
+/>
 
           </div>
 
