@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { BrainCircuit, FileText, Sparkles } from "lucide-react";
 
 import { register } from "../services/authService";
-
+import { login } from "../services/authService";
+import { saveToken } from "../utils/auth";
 export default function Register() {
   const navigate = useNavigate();
 
@@ -12,25 +13,31 @@ export default function Register() {
   const [password, setPassword] = useState("");
 
   async function handleRegister(
-    e: React.FormEvent
-  ) {
-    e.preventDefault();
+  e: React.FormEvent
+) {
+  e.preventDefault();
 
-    try {
-      await register({
-        full_name: fullName,
-        email,
-        password,
-      });
+  try {
+    await register({
+      full_name: fullName,
+      email,
+      password,
+    });
 
-      alert("Account created successfully!");
+    // Automatically log in
+    const data = await login({
+      email,
+      password,
+    });
 
-      navigate("/");
-    } catch (err) {
-      console.error(err);
-      alert("Registration failed");
-    }
+    saveToken(data.access_token);
+
+    navigate("/dashboard");
+  } catch (err) {
+    console.error(err);
+    alert("Registration failed");
   }
+}
 
   return (
     <div className="min-h-screen grid lg:grid-cols-2 bg-slate-100">
