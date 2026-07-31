@@ -1,3 +1,5 @@
+import { FileText, Trash2 } from "lucide-react";
+
 import { deleteDocument } from "../services/documentService";
 import type { Document } from "../types/document";
 
@@ -30,21 +32,66 @@ export default function DocumentList({
       console.error(err);
 
       alert("Unable to delete document");
+
     }
   }
 
   return (
-    <div className="bg-white rounded-xl shadow p-6">
 
-      <h2 className="text-xl font-semibold mb-4">
-        Uploaded Documents
-      </h2>
+    <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6">
+
+      {/* Header */}
+
+      <div className="flex justify-between items-center mb-6">
+
+        <div>
+
+          <h2 className="text-xl font-bold">
+            Uploaded Documents
+          </h2>
+
+          <p className="text-sm text-slate-500 mt-1">
+            {documents.length} document
+            {documents.length !== 1 ? "s" : ""}
+          </p>
+
+        </div>
+
+        <div className="bg-blue-100 p-3 rounded-xl">
+
+          <FileText
+            className="text-blue-600"
+            size={22}
+          />
+
+        </div>
+
+      </div>
+
+      {/* Empty State */}
 
       {documents.length === 0 ? (
 
-        <p className="text-slate-500">
-          No documents uploaded.
-        </p>
+        <div className="text-center py-12">
+
+          <FileText
+            size={60}
+            className="mx-auto text-slate-300"
+          />
+
+          <h3 className="mt-5 text-lg font-semibold">
+
+            No PDFs Uploaded
+
+          </h3>
+
+          <p className="text-slate-500 mt-2">
+
+            Upload a PDF to begin chatting with your documents.
+
+          </p>
+
+        </div>
 
       ) : (
 
@@ -55,38 +102,69 @@ export default function DocumentList({
             <div
               key={doc.id}
               className="
-              border
-              rounded-xl
-              p-4
-              flex
-              justify-between
-              items-center
+                flex
+                justify-between
+                items-center
+                rounded-xl
+                border
+                border-slate-200
+                p-4
+                hover:shadow-md
+                hover:border-blue-300
+                transition-all
+                duration-200
               "
             >
 
-              <div>
+              <div className="flex items-center gap-4">
 
-                <p className="font-semibold">
-                  {doc.original_name}
-                </p>
+                <div className="bg-red-100 p-3 rounded-xl">
 
-                <p className="text-sm text-slate-500">
-                  {(doc.file_size / 1024).toFixed(2)} KB
-                </p>
+                  <FileText
+                    className="text-red-600"
+                    size={22}
+                  />
+
+                </div>
+
+                <div>
+
+                  <h3 className="font-semibold text-slate-800 break-all">
+
+                    {doc.original_name}
+
+                  </h3>
+
+                  <p className="text-sm text-slate-500 mt-1">
+
+                    {(doc.file_size / 1024).toFixed(2)} KB
+
+                  </p>
+
+                </div>
 
               </div>
 
               <button
-                onClick={() =>
-                  handleDelete(doc.id)
-                }
+                onClick={() => handleDelete(doc.id)}
                 className="
-                text-red-600
-                hover:text-red-700
-                font-medium
+                  flex
+                  items-center
+                  gap-2
+                  bg-red-50
+                  hover:bg-red-100
+                  text-red-600
+                  px-4
+                  py-2
+                  rounded-lg
+                  transition
                 "
               >
-                🗑 Delete
+
+                <Trash2 size={18} />
+
+                Delete
+
               </button>
 
             </div>
@@ -98,5 +176,6 @@ export default function DocumentList({
       )}
 
     </div>
+
   );
 }
