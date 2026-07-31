@@ -10,12 +10,21 @@ import ChatBox from "../project/ChatBox";
 import ChatInput from "../project/ChatInput";
 
 import { getDocuments } from "../services/documentService";
+import { askQuestion } from "../services/chatService";
+
 import type { Document } from "../types/document";
+
+interface Message {
+  role: "user" | "assistant";
+  content: string;
+}
 
 export default function Project() {
   const { projectId } = useParams();
 
   const [documents, setDocuments] = useState<Document[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     loadDocuments();
@@ -30,6 +39,44 @@ export default function Project() {
     } catch (err) {
       console.error(err);
     }
+  }
+
+  async function handleSend(question: string) {
+    if (!projectId || !question.trim()) return;
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: "user",
+        content: question,
+      },
+    ]);
+
+    setLoading(true);
+
+    try {
+      const response = await askQuestion(projectId, question);
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: response.answer,
+        },
+      ]);
+    } catch (err) {
+      console.error(err);
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: "Unable to generate an answer.",
+        },
+      ]);
+    }
+
+    setLoading(false);
   }
 
   return (
@@ -55,17 +102,23 @@ export default function Project() {
             />
 
             <DocumentList
-  documents={documents}
-  onDelete={loadDocuments}
-/>
+              documents={documents}
+              onDelete={loadDocuments}
+            />
 
           </div>
 
-          <div className="col-span-2">
+          <div className="col-span-2 flex flex-col">
 
-            <ChatBox />
+            <ChatBox
+              messages={messages}
+              loading={loading}
+            />
 
-            <ChatInput />
+            <ChatInput
+              onSend={handleSend}
+              disabled={loading}
+            />
 
           </div>
 
