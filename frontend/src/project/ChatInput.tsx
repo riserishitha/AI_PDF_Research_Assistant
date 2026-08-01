@@ -1,66 +1,59 @@
 import { useState } from "react";
 
 interface Props {
-  onSend: (question: string) => void;
-  disabled?: boolean;
+  onSend: (question: string) => Promise<void>;
 }
 
 export default function ChatInput({
   onSend,
-  disabled,
 }: Props) {
+  const [question, setQuestion] =
+    useState("");
 
-  const [question, setQuestion] = useState("");
-
-  function handleSubmit(
-    e: React.FormEvent
-  ) {
-    e.preventDefault();
-
+  async function handleSend() {
     if (!question.trim()) return;
 
-    onSend(question);
+    await onSend(question);
 
     setQuestion("");
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex gap-4 mt-4"
-    >
+    <div className="flex gap-4 mt-5">
 
       <input
         value={question}
         onChange={(e) =>
           setQuestion(e.target.value)
         }
-        placeholder="Ask anything about your PDF..."
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handleSend();
+          }
+        }}
+        placeholder="Ask anything about your document..."
         className="
         flex-1
         border
         rounded-xl
-        px-4
-        py-3
+        px-5
+        py-4
         "
-        disabled={disabled}
       />
 
       <button
-        type="submit"
-        disabled={disabled}
+        onClick={handleSend}
         className="
         bg-blue-600
-        text-white
-        px-6
-        rounded-xl
         hover:bg-blue-700
-        disabled:bg-gray-400
+        text-white
+        rounded-xl
+        px-8
         "
       >
         Send
       </button>
 
-    </form>
+    </div>
   );
 }

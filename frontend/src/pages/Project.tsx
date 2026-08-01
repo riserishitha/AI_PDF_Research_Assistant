@@ -9,15 +9,17 @@ import DocumentList from "../project/DocumentList";
 import ChatBox from "../project/ChatBox";
 import ChatInput from "../project/ChatInput";
 
-import { getDocuments } from "../services/documentService";
-import { askQuestion } from "../services/chatService";
+import {
+  getDocuments,
+} from "../services/documentService";
+
+import {
+  askQuestion,
+  getChatHistory,
+} from "../services/chatService";
 
 import type { Document } from "../types/document";
-
-interface Message {
-  role: "user" | "assistant";
-  content: string;
-}
+import type { Message } from "../types/chat";
 
 export default function Project() {
   const { projectId } = useParams();
@@ -28,6 +30,7 @@ export default function Project() {
 
   useEffect(() => {
     loadDocuments();
+    loadChatHistory();
   }, [projectId]);
 
   async function loadDocuments() {
@@ -41,9 +44,36 @@ export default function Project() {
     }
   }
 
-  async function handleSend(question: string) {
-    if (!projectId || !question.trim()) return;
+  async function loadChatHistory() {
+    if (!projectId) return;
 
+    try {
+      const history = await getChatHistory(projectId);
+
+      const formattedMessages: Message[] = [];
+
+      history.forEach((chat) => {
+        formattedMessages.push({
+          role: "user",
+          content: chat.question,
+        });
+
+        formattedMessages.push({
+          role: "assistant",
+          content: chat.answer,
+        });
+      });
+
+      setMessages(formattedMessages);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function handleSend(question: string) {
+    if (!projectId) return;
+
+    // Show user message immediately
     setMessages((prev) => [
       ...prev,
       {
@@ -55,7 +85,10 @@ export default function Project() {
     setLoading(true);
 
     try {
-      const response = await askQuestion(projectId, question);
+      const response = await askQuestion(
+        projectId,
+        question
+      );
 
       setMessages((prev) => [
         ...prev,
@@ -71,7 +104,8 @@ export default function Project() {
         ...prev,
         {
           role: "assistant",
-          content: "Unable to generate an answer.",
+          content:
+            "Sorry, I couldn't generate an answer.",
         },
       ]);
     }
@@ -81,19 +115,26 @@ export default function Project() {
 
   return (
     <Layout>
+
       <Header />
 
       <div className="max-w-7xl mx-auto p-8">
 
-        <h1 className="text-4xl font-bold">
-          AI Project Workspace
-        </h1>
+        <div className="mb-8">
 
-        <p className="text-slate-500 mt-2">
-          Upload PDFs and ask questions about them.
-        </p>
+          <h1 className="text-4xl font-bold">
+            AI Project Workspace
+          </h1>
 
-        <div className="grid grid-cols-3 gap-8 mt-10">
+          <p className="text-slate-500 mt-2">
+            Upload PDFs and chat with your documents using AI.
+          </p>
+
+        </div>
+
+        <div className="grid grid-cols-3 gap-8">
+
+          {/* LEFT SIDE */}
 
           <div className="space-y-6">
 
@@ -108,6 +149,8 @@ export default function Project() {
 
           </div>
 
+          {/* RIGHT SIDE */}
+
           <div className="col-span-2 flex flex-col">
 
             <ChatBox
@@ -117,7 +160,6 @@ export default function Project() {
 
             <ChatInput
               onSend={handleSend}
-              disabled={loading}
             />
 
           </div>
