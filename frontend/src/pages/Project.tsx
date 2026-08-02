@@ -65,6 +65,7 @@ export default function Project() {
       });
 
       setMessages(formattedMessages);
+
     } catch (err) {
       console.error(err);
     }
@@ -73,7 +74,7 @@ export default function Project() {
   async function handleSend(question: string) {
     if (!projectId) return;
 
-    // Show user message immediately
+    // Instantly display the user's message
     setMessages((prev) => [
       ...prev,
       {
@@ -90,6 +91,7 @@ export default function Project() {
         question
       );
 
+      // Add AI response
       setMessages((prev) => [
         ...prev,
         {
@@ -97,6 +99,7 @@ export default function Project() {
           content: response.answer,
         },
       ]);
+
     } catch (err) {
       console.error(err);
 
@@ -105,38 +108,41 @@ export default function Project() {
         {
           role: "assistant",
           content:
-            "Sorry, I couldn't generate an answer.",
+            "Sorry, I couldn't generate an answer. Please try again.",
         },
       ]);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   }
 
   return (
     <Layout>
-
       <Header />
 
-      <div className="max-w-7xl mx-auto p-8">
+      <div className="max-w-7xl mx-auto px-8 py-8">
+
+        {/* Page Header */}
 
         <div className="mb-8">
 
-          <h1 className="text-4xl font-bold">
+          <h1 className="text-4xl font-bold text-slate-900">
             AI Project Workspace
           </h1>
 
           <p className="text-slate-500 mt-2">
-            Upload PDFs and chat with your documents using AI.
+            Upload PDFs, explore their contents, and chat with your AI assistant.
           </p>
 
         </div>
 
-        <div className="grid grid-cols-3 gap-8">
+        {/* Main Layout */}
 
-          {/* LEFT SIDE */}
+        <div className="grid grid-cols-12 gap-8">
 
-          <div className="space-y-6">
+          {/* Left Panel */}
+
+          <div className="col-span-4 space-y-6">
 
             <UploadSection
               onUploadSuccess={loadDocuments}
@@ -149,9 +155,9 @@ export default function Project() {
 
           </div>
 
-          {/* RIGHT SIDE */}
+          {/* Right Panel */}
 
-          <div className="col-span-2 flex flex-col">
+          <div className="col-span-8 flex flex-col">
 
             <ChatBox
               messages={messages}
@@ -160,6 +166,7 @@ export default function Project() {
 
             <ChatInput
               onSend={handleSend}
+              loading={loading}
             />
 
           </div>
