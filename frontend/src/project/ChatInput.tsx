@@ -1,24 +1,45 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { SendHorizontal } from "lucide-react";
 
 interface Props {
   onSend: (question: string) => void;
-  loading: boolean;
 }
 
 export default function ChatInput({
   onSend,
-  loading,
 }: Props) {
   const [question, setQuestion] = useState("");
+
+  const textareaRef =
+    useRef<HTMLTextAreaElement>(null);
+
+  function resizeTextarea() {
+    if (!textareaRef.current) return;
+
+    textareaRef.current.style.height = "auto";
+    textareaRef.current.style.height =
+      textareaRef.current.scrollHeight + "px";
+  }
+
+  function handleChange(
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) {
+    setQuestion(e.target.value);
+    resizeTextarea();
+  }
 
   function handleSend() {
     const text = question.trim();
 
-    if (!text || loading) return;
+    if (!text) return;
 
     onSend(text);
+
     setQuestion("");
+
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
   }
 
   function handleKeyDown(
@@ -36,6 +57,7 @@ export default function ChatInput({
       mt-6
       bg-white
       border
+      border-slate-200
       rounded-3xl
       shadow-sm
       p-4
@@ -44,17 +66,16 @@ export default function ChatInput({
       <div className="flex items-end gap-4">
 
         <textarea
+          ref={textareaRef}
           rows={1}
           value={question}
-          disabled={loading}
-          onChange={(e) =>
-            setQuestion(e.target.value)
-          }
+          onChange={handleChange}
           onKeyDown={handleKeyDown}
           placeholder="Ask anything about your uploaded documents..."
           className="
           flex-1
           resize-none
+          overflow-hidden
           border-none
           outline-none
           bg-transparent
@@ -68,7 +89,7 @@ export default function ChatInput({
 
         <button
           onClick={handleSend}
-          disabled={loading || !question.trim()}
+          disabled={!question.trim()}
           className="
           w-14
           h-14
@@ -82,6 +103,8 @@ export default function ChatInput({
           justify-center
           transition-all
           duration-200
+          hover:scale-105
+          active:scale-95
           "
         >
           <SendHorizontal
@@ -95,15 +118,16 @@ export default function ChatInput({
       <div className="flex justify-between items-center mt-3">
 
         <p className="text-xs text-slate-400">
-          Press <span className="font-semibold">Enter</span> to send •
-          <span className="font-semibold"> Shift + Enter</span> for a new line
+          Press <span className="font-semibold">Enter</span> to send •{" "}
+          <span className="font-semibold">
+            Shift + Enter
+          </span>{" "}
+          for a new line
         </p>
 
-        {loading && (
-          <span className="text-xs text-blue-600 font-medium">
-            AI is generating a response...
-          </span>
-        )}
+        <span className="text-xs text-slate-400">
+          {question.length} characters
+        </span>
 
       </div>
     </div>

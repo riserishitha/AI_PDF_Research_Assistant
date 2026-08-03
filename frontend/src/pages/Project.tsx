@@ -26,7 +26,6 @@ export default function Project() {
 
   const [documents, setDocuments] = useState<Document[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     loadDocuments();
@@ -45,77 +44,90 @@ export default function Project() {
   }
 
   async function loadChatHistory() {
-    if (!projectId) return;
+  if (!projectId) return;
 
-    try {
-      const history = await getChatHistory(projectId);
+  try {
+    const history = await getChatHistory(projectId);
 
-      const formattedMessages: Message[] = [];
+    const formattedMessages: Message[] = [];
 
-      history.forEach((chat) => {
-        formattedMessages.push({
-          role: "user",
-          content: chat.question,
-        });
-
-        formattedMessages.push({
-          role: "assistant",
-          content: chat.answer,
-        });
+    history.forEach((chat) => {
+      formattedMessages.push({
+        id: crypto.randomUUID(),
+        role: "user",
+        content: chat.question,
       });
 
-      setMessages(formattedMessages);
+      formattedMessages.push({
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content: chat.answer,
+      });
+    });
 
-    } catch (err) {
-      console.error(err);
-    }
+    setMessages(formattedMessages);
+
+  } catch (err) {
+    console.error(err);
   }
+}
+async function handleSend(question: string) {
+  if (!projectId) return;
 
-  async function handleSend(question: string) {
-    if (!projectId) return;
+  const userMessage: Message = {
+    id: crypto.randomUUID(),
+    role: "user",
+    content: question,
+  };
 
-    // Instantly display the user's message
-    setMessages((prev) => [
-      ...prev,
-      {
-        role: "user",
-        content: question,
-      },
-    ]);
+  const thinkingMessage: Message = {
+    id: crypto.randomUUID(),
+    role: "assistant",
+    content: "",
+    loading: true,
+  };
 
-    setLoading(true);
+  setMessages((prev) => [
+    ...prev,
+    userMessage,
+    thinkingMessage,
+  ]);
 
-    try {
-      const response = await askQuestion(
-        projectId,
-        question
-      );
+  try {
+    const response = await askQuestion(
+      projectId,
+      question
+    );
 
-      // Add AI response
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: response.answer,
-        },
-      ]);
+    setMessages((prev) =>
+      prev.map((msg) =>
+        msg.id === thinkingMessage.id
+          ? {
+              ...msg,
+              loading: false,
+              content: response.answer,
+            }
+          : msg
+      )
+    );
 
-    } catch (err) {
-      console.error(err);
+  } catch (err) {
+    console.error(err);
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content:
-            "Sorry, I couldn't generate an answer. Please try again.",
-        },
-      ]);
-    } finally {
-      setLoading(false);
-    }
+    setMessages((prev) =>
+      prev.map((msg) =>
+        msg.id === thinkingMessage.id
+          ? {
+              ...msg,
+              loading: false,
+              content:
+                "Sorry, I couldn't generate an answer.",
+            }
+          : msg
+      )
+    );
   }
-
+}
   return (
     <Layout>
       <Header />
@@ -160,14 +172,11 @@ export default function Project() {
           <div className="col-span-8 flex flex-col">
 
             <ChatBox
-              messages={messages}
-              loading={loading}
-            />
+messages={messages}
+/>
 
-            <ChatInput
-              onSend={handleSend}
-              loading={loading}
-            />
+<ChatInput onSend={handleSend}
+/>
 
           </div>
 

@@ -5,12 +5,10 @@ import type { Message } from "../types/chat";
 
 interface Props {
   messages: Message[];
-  loading: boolean;
 }
 
 export default function ChatBox({
   messages,
-  loading,
 }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -168,7 +166,33 @@ export default function ChatBox({
                   }
                   `}
                 >
-                  {message.content}
+                 {message.loading ? (
+  <div className="flex items-center gap-3">
+
+    <div className="flex gap-1">
+
+      <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></span>
+
+      <span
+        className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+        style={{ animationDelay: "0.15s" }}
+      ></span>
+
+      <span
+        className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+        style={{ animationDelay: "0.3s" }}
+      ></span>
+
+    </div>
+
+    <span className="text-slate-500">
+      AI is thinking...
+    </span>
+
+  </div>
+) : (
+  message.content
+)}
                 </div>
 
                 <p
