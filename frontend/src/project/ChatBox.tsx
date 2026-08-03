@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Bot, User, Loader2 } from "lucide-react";
+import { Bot, User } from "lucide-react";
 
 import type { Message } from "../types/chat";
 
@@ -16,7 +16,7 @@ export default function ChatBox({
     bottomRef.current?.scrollIntoView({
       behavior: "smooth",
     });
-  }, [messages, loading]);
+  }, [messages]);
 
   return (
     <div
@@ -24,6 +24,7 @@ export default function ChatBox({
       bg-white
       rounded-3xl
       border
+      border-slate-200
       shadow-sm
       h-[650px]
       flex
@@ -48,7 +49,7 @@ export default function ChatBox({
         </h2>
 
         <p className="text-sm text-slate-500 mt-1">
-          Ask anything about your uploaded documents.
+          Ask questions about your uploaded PDFs.
         </p>
       </div>
 
@@ -64,7 +65,7 @@ export default function ChatBox({
         bg-slate-50
         "
       >
-        {messages.length === 0 && !loading && (
+        {messages.length === 0 && (
           <div className="flex flex-col items-center justify-center h-full text-center">
 
             <div
@@ -90,33 +91,33 @@ export default function ChatBox({
 
             <p className="mt-3 text-slate-500 max-w-md leading-7">
               Upload one or more PDF documents and ask
-              questions about their content. I will answer
-              using only the information from your documents.
+              questions about their content.
+              I will answer using the information
+              available in those documents.
             </p>
+
           </div>
         )}
 
-        {messages.map((message, index) => (
+        {messages.map((message) => (
+
           <div
-            key={index}
+            key={message.id}
             className={`flex ${
               message.role === "user"
                 ? "justify-end"
                 : "justify-start"
             }`}
           >
+
             <div
-              className={`
-                flex
-                gap-3
-                max-w-[80%]
-                ${
-                  message.role === "user"
-                    ? "flex-row-reverse"
-                    : ""
-                }
-              `}
+              className={`flex gap-3 max-w-[80%] ${
+                message.role === "user"
+                  ? "flex-row-reverse"
+                  : ""
+              }`}
             >
+
               {/* Avatar */}
 
               <div
@@ -124,10 +125,10 @@ export default function ChatBox({
                 w-11
                 h-11
                 rounded-full
+                shrink-0
                 flex
                 items-center
                 justify-center
-                shrink-0
                 ${
                   message.role === "assistant"
                     ? "bg-blue-100"
@@ -135,22 +136,29 @@ export default function ChatBox({
                 }
                 `}
               >
+
                 {message.role === "assistant" ? (
+
                   <Bot
                     size={22}
                     className="text-blue-600"
                   />
+
                 ) : (
+
                   <User
                     size={20}
                     className="text-slate-700"
                   />
+
                 )}
+
               </div>
 
               {/* Bubble */}
 
               <div>
+
                 <div
                   className={`
                   rounded-3xl
@@ -161,45 +169,55 @@ export default function ChatBox({
                   shadow-sm
                   ${
                     message.role === "assistant"
-                      ? "bg-white border"
+                      ? "bg-white border border-slate-200 text-slate-700"
                       : "bg-blue-600 text-white"
                   }
                   `}
                 >
-                 {message.loading ? (
-  <div className="flex items-center gap-3">
 
-    <div className="flex gap-1">
+                  {message.loading ? (
 
-      <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></span>
+                    <div className="flex items-center gap-3">
 
-      <span
-        className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
-        style={{ animationDelay: "0.15s" }}
-      ></span>
+                      <div className="flex gap-1">
 
-      <span
-        className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
-        style={{ animationDelay: "0.3s" }}
-      ></span>
+                        <span className="w-2 h-2 rounded-full bg-blue-500 animate-bounce"></span>
 
-    </div>
+                        <span
+                          className="w-2 h-2 rounded-full bg-blue-500 animate-bounce"
+                          style={{
+                            animationDelay: "0.15s",
+                          }}
+                        ></span>
 
-    <span className="text-slate-500">
-      AI is thinking...
-    </span>
+                        <span
+                          className="w-2 h-2 rounded-full bg-blue-500 animate-bounce"
+                          style={{
+                            animationDelay: "0.30s",
+                          }}
+                        ></span>
 
-  </div>
-) : (
-  message.content
-)}
+                      </div>
+
+                      <span className="text-slate-500">
+                        AI is thinking...
+                      </span>
+
+                    </div>
+
+                  ) : (
+
+                    message.content
+
+                  )}
+
                 </div>
 
                 <p
                   className={`
                   text-xs
-                  mt-2
                   text-slate-400
+                  mt-2
                   ${
                     message.role === "user"
                       ? "text-right"
@@ -212,60 +230,19 @@ export default function ChatBox({
                     minute: "2-digit",
                   })}
                 </p>
+
               </div>
+
             </div>
+
           </div>
+
         ))}
 
-        {/* Loading */}
-
-        {loading && (
-          <div className="flex gap-3">
-
-            <div
-              className="
-              w-11
-              h-11
-              rounded-full
-              bg-blue-100
-              flex
-              items-center
-              justify-center
-              "
-            >
-              <Bot
-                size={22}
-                className="text-blue-600"
-              />
-            </div>
-
-            <div
-              className="
-              bg-white
-              border
-              rounded-3xl
-              px-5
-              py-4
-              flex
-              items-center
-              gap-3
-              shadow-sm
-              "
-            >
-              <Loader2
-                size={18}
-                className="animate-spin text-blue-600"
-              />
-
-              <span className="text-slate-500">
-                AI is thinking...
-              </span>
-            </div>
-          </div>
-        )}
-
         <div ref={bottomRef} />
+
       </div>
+
     </div>
   );
 }
