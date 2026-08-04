@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Bot, User } from "lucide-react";
-
+import MarkdownRenderer from "../components/common/MarkdownRenderer";
 import type { Message } from "../types/chat";
 
 interface Props {
@@ -207,7 +207,9 @@ export default function ChatBox({
 
                   ) : (
 
-                    message.content
+                   <MarkdownRenderer
+  content={message.content}
+/>
 
                   )}
 
