@@ -2,7 +2,8 @@ import { useRef, useState } from "react";
 import { SendHorizontal } from "lucide-react";
 
 interface Props {
-  onSend: (question: string) => void;
+    onSend: (question: string) => void;
+    loading: boolean;
 }
 
 export default function ChatInput({

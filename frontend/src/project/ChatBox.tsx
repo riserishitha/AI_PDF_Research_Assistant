@@ -5,6 +5,7 @@ import type { Message } from "../types/chat";
 
 interface Props {
   messages: Message[];
+  loading: boolean;
 }
 
 export default function ChatBox({

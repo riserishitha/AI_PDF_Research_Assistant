@@ -3,7 +3,9 @@ from uuid import UUID
 from fastapi import APIRouter
 from fastapi import Depends
 from sqlalchemy.orm import Session
+from fastapi.responses import StreamingResponse
 
+from app.services.llm_service import stream_llm
 from app.database.dependencies import get_db
 from app.core.dependencies import get_current_user
 from app.models.user import User
@@ -75,4 +77,47 @@ def get_chat_history(
     return get_project_chats(
         db,
         project_id,
+    )
+@router.post("/{project_id}/stream")
+def stream_chat(
+    project_id: UUID,
+    request: ChatRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    chunks = get_project_chunks(
+        db,
+        project_id,
+    )
+
+    similar_chunks = find_similar_chunks(
+        request.question,
+        chunks,
+    )
+
+    context = "\n\n".join(
+        chunk.content
+        for chunk in similar_chunks
+    )
+
+    def generate():
+        answer = ""
+
+        for piece in stream_llm(
+            request.question,
+            context,
+        ):
+            answer += piece
+            yield piece
+
+        create_chat(
+            db=db,
+            project_id=project_id,
+            question=request.question,
+            answer=answer,
+        )
+
+    return StreamingResponse(
+        generate(),
+        media_type="text/plain",
     )

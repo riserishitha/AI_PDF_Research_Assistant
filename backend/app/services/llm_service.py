@@ -7,14 +7,22 @@ client = genai.Client(
 )
 
 
+SYSTEM_PROMPT = """
+You are an AI Research Assistant.
+
+Answer ONLY using the provided context.
+
+If the answer is not found in the context, reply:
+
+"I couldn't find that information in the uploaded documents."
+
+Always answer in Markdown.
+"""
+
+
 def ask_llm(question: str, context: str):
     prompt = f"""
-You are a helpful AI Research Assistant.
-
-Answer ONLY from the context below.
-
-If the answer is not present, say:
-"I couldn't find that information in the uploaded documents."
+{SYSTEM_PROMPT}
 
 Context:
 {context}
@@ -23,14 +31,35 @@ Question:
 {question}
 """
 
-    try:
-        response = client.models.generate_content(
-            model="gemini-3.5-flash",
-            contents=prompt,
-        )
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=prompt,
+    )
 
-        return response.text
+    return response.text
 
-    except Exception as e:
-        print(e)
-        raise
+
+def stream_llm(question: str, context: str):
+    prompt = f"""
+{SYSTEM_PROMPT}
+
+Context:
+{context}
+
+Question:
+{question}
+"""
+
+    response = client.models.generate_content_stream(
+        model="gemini-2.5-flash",
+        contents=prompt,
+    )
+
+    full_answer = ""
+
+    for chunk in response:
+        if chunk.text:
+            full_answer += chunk.text
+            yield chunk.text
+
+    return full_answer
