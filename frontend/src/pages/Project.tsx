@@ -14,7 +14,7 @@ import {
 } from "../services/documentService";
 
 import {
-  askQuestion,
+  streamQuestion,
   getChatHistory,
 } from "../services/chatService";
 
@@ -26,8 +26,11 @@ export default function Project() {
 
   const [documents, setDocuments] = useState<Document[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    if (!projectId) return;
+
     loadDocuments();
     loadChatHistory();
   }, [projectId]);
@@ -44,97 +47,114 @@ export default function Project() {
   }
 
   async function loadChatHistory() {
-  if (!projectId) return;
+    if (!projectId) return;
 
-  try {
-    const history = await getChatHistory(projectId);
+    try {
+      const history = await getChatHistory(projectId);
 
-    const formattedMessages: Message[] = [];
+      const formattedMessages: Message[] = [];
 
-    history.forEach((chat) => {
-      formattedMessages.push({
-        id: crypto.randomUUID(),
-        role: "user",
-        content: chat.question,
+      history.forEach((chat) => {
+        formattedMessages.push({
+          id: crypto.randomUUID(),
+          role: "user",
+          content: chat.question,
+        });
+
+        formattedMessages.push({
+          id: crypto.randomUUID(),
+          role: "assistant",
+          content: chat.answer,
+        });
       });
 
-      formattedMessages.push({
-        id: crypto.randomUUID(),
-        role: "assistant",
-        content: chat.answer,
-      });
-    });
-
-    setMessages(formattedMessages);
-
-  } catch (err) {
-    console.error(err);
+      setMessages(formattedMessages);
+    } catch (err) {
+      console.error(err);
+    }
   }
-}
-async function handleSend(question: string) {
-  if (!projectId) return;
 
-  const userMessage: Message = {
-    id: crypto.randomUUID(),
-    role: "user",
-    content: question,
-  };
+  async function handleSend(question: string) {
+    if (!projectId || loading) return;
 
-  const thinkingMessage: Message = {
-    id: crypto.randomUUID(),
-    role: "assistant",
-    content: "",
-    loading: true,
-  };
+    setLoading(true);
 
-  setMessages((prev) => [
-    ...prev,
-    userMessage,
-    thinkingMessage,
-  ]);
+    const userMessage: Message = {
+      id: crypto.randomUUID(),
+      role: "user",
+      content: question,
+    };
 
-  try {
-    const response = await askQuestion(
-      projectId,
-      question
-    );
+    const assistantId = crypto.randomUUID();
 
-    setMessages((prev) =>
-      prev.map((msg) =>
-        msg.id === thinkingMessage.id
-          ? {
-              ...msg,
-              loading: false,
-              content: response.answer,
-            }
-          : msg
-      )
-    );
+    const assistantMessage: Message = {
+      id: assistantId,
+      role: "assistant",
+      content: "",
+      loading: true,
+    };
 
-  } catch (err) {
-    console.error(err);
+    setMessages((prev) => [
+      ...prev,
+      userMessage,
+      assistantMessage,
+    ]);
 
-    setMessages((prev) =>
-      prev.map((msg) =>
-        msg.id === thinkingMessage.id
-          ? {
-              ...msg,
-              loading: false,
-              content:
-                "Sorry, I couldn't generate an answer.",
-            }
-          : msg
-      )
-    );
+    try {
+      await streamQuestion(
+        projectId,
+        question,
+        (chunk) => {
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === assistantId
+                ? {
+                    ...msg,
+                    content: msg.content + chunk,
+                  }
+                : msg
+            )
+          );
+        }
+      );
+
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === assistantId
+            ? {
+                ...msg,
+                loading: false,
+              }
+            : msg
+        )
+      );
+    } catch (err) {
+      console.error(err);
+
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === assistantId
+            ? {
+                ...msg,
+                loading: false,
+                content:
+                  "❌ Sorry, I couldn't generate an answer.",
+              }
+            : msg
+        )
+      );
+    } finally {
+      setLoading(false);
+    }
   }
-}
+
   return (
     <Layout>
       <Header />
 
       <div className="max-w-7xl mx-auto px-8 py-8">
 
-        {/* Page Header */}
+        {/* Header */}
 
         <div className="mb-8">
 
@@ -152,7 +172,7 @@ async function handleSend(question: string) {
 
         <div className="grid grid-cols-12 gap-8">
 
-          {/* Left Panel */}
+          {/* Left Sidebar */}
 
           <div className="col-span-4 space-y-6">
 
@@ -167,16 +187,19 @@ async function handleSend(question: string) {
 
           </div>
 
-          {/* Right Panel */}
+          {/* Chat Section */}
 
           <div className="col-span-8 flex flex-col">
 
             <ChatBox
-messages={messages}
-/>
+              messages={messages}
+              loading={loading}
+            />
 
-<ChatInput onSend={handleSend}
-/>
+            <ChatInput
+              onSend={handleSend}
+              loading={loading}
+            />
 
           </div>
 
