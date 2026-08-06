@@ -6,11 +6,13 @@ import type { Document } from "../types/document";
 interface Props {
   documents: Document[];
   onDelete: () => void;
+  onSelect: (doc: Document) => void;
 }
 
 export default function DocumentList({
   documents,
   onDelete,
+  onSelect,
 }: Props) {
 
   async function handleDelete(id: string) {
@@ -101,6 +103,7 @@ export default function DocumentList({
 
             <div
               key={doc.id}
+              onClick={() => onSelect(doc)}
               className="
                 flex
                 justify-between
@@ -146,7 +149,11 @@ export default function DocumentList({
               </div>
 
               <button
-                onClick={() => handleDelete(doc.id)}
+  onClick={(e) => {
+    e.stopPropagation();
+    handleDelete(doc.id);
+  }}
+
                 className="
                   flex
                   items-center
