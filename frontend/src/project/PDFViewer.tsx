@@ -12,6 +12,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 
 interface Props {
   fileUrl?: string;
+  fileName?: string;
 }
 
 export default function PDFViewer({
