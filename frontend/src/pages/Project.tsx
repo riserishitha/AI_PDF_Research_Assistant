@@ -258,12 +258,13 @@ export default function Project() {
             <div className="h-[650px]">
 
               <PDFViewer
-                fileUrl={
-                  selectedDocument
-                    ? getDocumentUrl(selectedDocument)
-                    : undefined
-                }
-              />
+  fileUrl={
+    selectedDocument
+      ? getDocumentUrl(selectedDocument)
+      : undefined
+  }
+  fileName={selectedDocument?.original_name}
+/>
 
             </div>
 
