@@ -96,8 +96,8 @@ def stream_chat(
     )
 
     context = "\n\n".join(
-        item["chunk"].content
-        for item in similar_chunks
+        chunk.content
+        for chunk in similar_chunks
     )
 
     def generate():

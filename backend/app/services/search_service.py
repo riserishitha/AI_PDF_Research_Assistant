@@ -8,10 +8,9 @@ def cosine_similarity(a, b):
     Calculate cosine similarity between two embedding vectors.
     """
 
-    a = np.array(a)
-    b = np.array(b)
+    a = np.array(a, dtype=float)
+    b = np.array(b, dtype=float)
 
-    # Prevent division by zero
     denominator = (
         np.linalg.norm(a) * np.linalg.norm(b)
     )
@@ -31,70 +30,91 @@ def find_similar_chunks(
     similarity_threshold: float = 0.20,
 ):
     """
-    Find the most relevant document chunks for a user query.
-
-    Args:
-        query:
-            User's question.
-
-        chunks:
-            Document chunks belonging to the project.
-
-        top_k:
-            Maximum number of chunks to return.
-
-        similarity_threshold:
-            Minimum similarity score required for a chunk
-            to be considered relevant.
-
-    Returns:
-        A list of tuples:
-
-        [
-            (similarity_score, chunk),
-            ...
-        ]
+    Find the most relevant document chunks
+    for a user query.
     """
 
+    print("\n========== RAG RETRIEVAL ==========")
+    print("Query:", query)
+    print("Total chunks received:", len(chunks))
+
     # --------------------------------------------------
-    # 1. Generate embedding for user's question
+    # 1. Generate embedding for query
     # --------------------------------------------------
 
     query_embedding = generate_embedding(query)
 
+    print(
+        "Query embedding generated:",
+        query_embedding is not None
+    )
+
+    if query_embedding is None:
+        print("ERROR: Query embedding is None")
+        print("===================================\n")
+        return []
+
+    print(
+        "Query embedding length:",
+        len(query_embedding)
+    )
+
     scored_chunks = []
 
     # --------------------------------------------------
-    # 2. Compare question with every chunk
+    # 2. Compare query with every chunk
     # --------------------------------------------------
 
     for chunk in chunks:
 
+        print(
+            f"\nChecking chunk {chunk.chunk_index}"
+        )
+
         if chunk.embedding is None:
+
+            print(
+                "Embedding exists: False"
+            )
+
             continue
 
+        print(
+            "Embedding exists: True"
+        )
+
+        print(
+            "Stored embedding length:",
+            len(chunk.embedding)
+        )
+
         try:
+
             score = cosine_similarity(
                 query_embedding,
                 chunk.embedding,
             )
 
+            print(
+                f"Similarity: {score:.4f}"
+            )
+
+            scored_chunks.append(
+                {
+                    "score": score,
+                    "chunk": chunk,
+                }
+            )
+
         except Exception as e:
+
             print(
                 f"Failed to compare chunk "
                 f"{chunk.chunk_index}: {e}"
             )
-            continue
-
-        scored_chunks.append(
-            {
-                "score": score,
-                "chunk": chunk,
-            }
-        )
 
     # --------------------------------------------------
-    # 3. Sort by highest similarity
+    # 3. Sort by similarity
     # --------------------------------------------------
 
     scored_chunks.sort(
@@ -103,7 +123,20 @@ def find_similar_chunks(
     )
 
     # --------------------------------------------------
-    # 4. Apply similarity threshold
+    # 4. Print ALL scores
+    # --------------------------------------------------
+
+    print("\n----- ALL SIMILARITY SCORES -----")
+
+    for item in scored_chunks:
+
+        print(
+            f"Chunk {item['chunk'].chunk_index}"
+            f" -> {item['score']:.4f}"
+        )
+
+    # --------------------------------------------------
+    # 5. Apply threshold
     # --------------------------------------------------
 
     relevant_chunks = [
@@ -113,27 +146,25 @@ def find_similar_chunks(
     ]
 
     # --------------------------------------------------
-    # 5. Keep only top K chunks
+    # 6. Keep top K
     # --------------------------------------------------
 
     relevant_chunks = relevant_chunks[:top_k]
 
     # --------------------------------------------------
-    # 6. Debug information
+    # 7. Final debug information
     # --------------------------------------------------
 
-    print("\n========== RAG RETRIEVAL ==========")
-
-    print(f"Query: {query}")
+    print("\n----- RETRIEVAL RESULT -----")
 
     print(
-        f"Total chunks searched: "
-        f"{len(scored_chunks)}"
+        "Similarity threshold:",
+        similarity_threshold
     )
 
     print(
-        f"Relevant chunks: "
-        f"{len(relevant_chunks)}"
+        "Relevant chunks:",
+        len(relevant_chunks)
     )
 
     for item in relevant_chunks:
@@ -142,10 +173,13 @@ def find_similar_chunks(
         score = item["score"]
 
         print(
-            f"Chunk {chunk.chunk_index} "
-            f"| Similarity: {score:.4f}"
+            f"Selected chunk {chunk.chunk_index}"
+            f" | Similarity: {score:.4f}"
         )
 
     print("===================================\n")
 
-    return relevant_chunks
+    return [
+        item["chunk"]
+        for item in relevant_chunks
+    ]
