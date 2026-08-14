@@ -2,6 +2,7 @@ from google import genai
 
 from app.core.config import settings
 
+
 client = genai.Client(
     api_key=settings.GEMINI_API_KEY,
 )
@@ -21,6 +22,7 @@ Always answer in Markdown.
 
 
 def ask_llm(question: str, context: str):
+
     prompt = f"""
 {SYSTEM_PROMPT}
 
@@ -32,7 +34,7 @@ Question:
 """
 
     response = client.models.generate_content(
-        model="gemini-2.5-flash",
+        model="gemini-3-flash-preview",
         contents=prompt,
     )
 
@@ -40,6 +42,7 @@ Question:
 
 
 def stream_llm(question: str, context: str):
+
     prompt = f"""
 {SYSTEM_PROMPT}
 
@@ -51,15 +54,11 @@ Question:
 """
 
     response = client.models.generate_content_stream(
-        model="gemini-2.5-flash",
+        model="gemini-3-flash-preview",
         contents=prompt,
     )
 
-    full_answer = ""
-
     for chunk in response:
-        if chunk.text:
-            full_answer += chunk.text
-            yield chunk.text
 
-    return full_answer
+        if chunk.text:
+            yield chunk.text
