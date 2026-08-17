@@ -13,6 +13,7 @@ import {
   MessageSquare,
   Upload,
   Brain,
+  ChevronRight,
 } from "lucide-react";
 
 import Layout from "../components/layout/Layout";
@@ -56,121 +57,198 @@ export default function Dashboard() {
     <Layout>
       <Header />
 
-      <div className="bg-slate-50 min-h-screen">
+      <main className="min-h-screen bg-[#f7f9fc]">
+        <div className="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-10 py-8">
 
-        <div className="max-w-7xl mx-auto px-8 py-8">
+          {/* ===================================================== */}
+          {/* HERO */}
+          {/* ===================================================== */}
 
-          {/* ================= HERO ================= */}
+          <section className="relative overflow-hidden rounded-[28px] bg-slate-950 shadow-2xl">
 
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-800 text-white p-10 shadow-xl">
+            {/* Background decoration */}
 
-            <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-blue-500/20 blur-3xl" />
+            <div className="absolute inset-0">
+              <div className="absolute -top-32 -right-20 w-96 h-96 bg-blue-600/30 rounded-full blur-3xl" />
+              <div className="absolute -bottom-40 left-1/3 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl" />
+              <div className="absolute top-20 left-1/2 w-40 h-40 bg-cyan-400/10 rounded-full blur-2xl" />
+            </div>
 
-            <div className="absolute bottom-0 left-0 w-60 h-60 rounded-full bg-indigo-400/10 blur-3xl" />
+            <div className="relative grid lg:grid-cols-[1.2fr_0.8fr] gap-10 items-center p-8 sm:p-10 lg:p-12">
 
-            <div className="relative grid lg:grid-cols-2 gap-10 items-center">
+              {/* Hero text */}
 
-              <div>
+              <div className="max-w-2xl">
 
-                <span className="inline-flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full text-sm">
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.07] px-4 py-2 text-sm text-blue-100 backdrop-blur">
+                  <Sparkles size={15} className="text-cyan-300" />
+                  AI-powered document workspace
+                </div>
 
-                  <Sparkles size={16} />
-
-                  AI Powered Workspace
-
-                </span>
-
-                <h1 className="text-5xl font-bold mt-6 leading-tight">
-
-                  Manage your PDFs
-
-                  <span className="block text-cyan-300">
-
-                    with Artificial Intelligence
-
+                <h1 className="mt-6 text-4xl sm:text-5xl lg:text-[54px] font-bold tracking-tight text-white leading-[1.08]">
+                  Your documents.
+                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-400">
+                    Your AI assistant.
                   </span>
-
                 </h1>
 
-                <p className="mt-6 text-blue-100 text-lg max-w-xl leading-8">
-
-                  Upload research papers, resumes, reports and manuals.
-
-                  Ask natural language questions and receive AI-generated
-
-                  answers instantly.
-
+                <p className="mt-6 text-base sm:text-lg text-slate-300 leading-8 max-w-xl">
+                  Upload your PDFs, organize them into projects, and ask
+                  questions using natural language. Your documents become
+                  searchable knowledge.
                 </p>
 
-                <div className="flex gap-4 mt-8">
-<Button
-  onClick={() => setOpenModal(true)}
-  className="
-    bg-blue-500
-    hover:bg-blue-400
-    text-white
-    px-8
-    py-4
-    rounded-xl
-    font-semibold
-    shadow-lg
-    border
-    border-blue-300
-    transition-all
-    duration-300
-    hover:scale-105
-  "
->
-  <Plus size={20} />
+                <div className="flex flex-wrap gap-3 mt-8">
 
-  <span className="ml-2">
-    Create Project
-  </span>
-</Button>
+                  <Button
+                    onClick={() => setOpenModal(true)}
+                    className="
+                      !bg-white
+                      !text-slate-900
+                      hover:!bg-blue-50
+                      px-6
+                      py-3
+                      rounded-xl
+                      font-semibold
+                      shadow-lg
+                      transition-all
+                      hover:-translate-y-0.5
+                    "
+                  >
+                    <Plus size={18} />
+                    <span className="ml-2">Create Project</span>
+                  </Button>
 
                   <button
-                    className="border border-white/30 px-6 rounded-xl hover:bg-white/10 transition"
+                    onClick={() =>
+                      document
+                        .getElementById("projects")
+                        ?.scrollIntoView({ behavior: "smooth" })
+                    }
+                    className="
+                      inline-flex
+                      items-center
+                      gap-2
+                      px-6
+                      py-3
+                      rounded-xl
+                      border
+                      border-white/15
+                      bg-white/[0.05]
+                      text-white
+                      font-medium
+                      hover:bg-white/10
+                      transition
+                    "
                   >
-                    Learn More
+                    View Projects
+                    <ArrowRight size={17} />
                   </button>
 
                 </div>
 
               </div>
 
-              <div className="flex justify-center">
+              {/* AI preview */}
 
-                <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-6 w-full max-w-md border border-white/20">
+              <div className="hidden lg:block">
 
-                  <div className="flex justify-between items-center">
+                <div className="rounded-3xl border border-white/10 bg-white/[0.07] backdrop-blur-xl p-5 shadow-2xl">
 
-                    <h3 className="font-semibold">
+                  <div className="flex items-center justify-between mb-5">
 
-                      AI Workspace
+                    <div className="flex items-center gap-3">
 
-                    </h3>
+                      <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
+                        <Brain
+                          size={21}
+                          className="text-cyan-300"
+                        />
+                      </div>
 
-                    <Brain className="text-cyan-300" />
+                      <div>
+                        <p className="text-white font-semibold">
+                          AI Workspace
+                        </p>
+
+                        <p className="text-xs text-slate-400">
+                          Ready to answer
+                        </p>
+                      </div>
+
+                    </div>
+
+                    <div className="w-2.5 h-2.5 bg-emerald-400 rounded-full shadow-[0_0_12px_rgba(52,211,153,0.8)]" />
 
                   </div>
 
-                  <div className="mt-6 space-y-4">
+                  <div className="space-y-3">
 
-                    <div className="bg-white/10 rounded-xl p-4">
+                    <div className="flex items-center gap-3 rounded-2xl bg-white/[0.06] border border-white/5 p-4">
 
-                      📄 Resume.pdf
+                      <div className="w-9 h-9 rounded-lg bg-red-500/15 flex items-center justify-center">
+                        <FileText
+                          size={18}
+                          className="text-red-300"
+                        />
+                      </div>
+
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-white font-medium">
+                          Research Paper.pdf
+                        </p>
+
+                        <p className="text-xs text-slate-400">
+                          12 pages
+                        </p>
+                      </div>
+
+                      <span className="text-xs text-emerald-300">
+                        Indexed
+                      </span>
 
                     </div>
 
-                    <div className="bg-white/10 rounded-xl p-4">
+                    <div className="flex items-center gap-3 rounded-2xl bg-white/[0.06] border border-white/5 p-4">
 
-                      📑 Research.pdf
+                      <div className="w-9 h-9 rounded-lg bg-blue-500/15 flex items-center justify-center">
+                        <FileText
+                          size={18}
+                          className="text-blue-300"
+                        />
+                      </div>
+
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-white font-medium">
+                          Resume.pdf
+                        </p>
+
+                        <p className="text-xs text-slate-400">
+                          3 pages
+                        </p>
+                      </div>
+
+                      <span className="text-xs text-emerald-300">
+                        Indexed
+                      </span>
 
                     </div>
 
-                    <div className="bg-cyan-400 text-slate-900 rounded-xl p-4 font-semibold">
+                    <div className="rounded-2xl bg-cyan-400 p-4 text-slate-950">
 
-                      💬 Ask AI Anything...
+                      <div className="flex items-center gap-2">
+
+                        <MessageSquare size={17} />
+
+                        <span className="text-sm font-semibold">
+                          Ask your documents
+                        </span>
+
+                      </div>
+
+                      <p className="mt-2 text-sm text-slate-800/80">
+                        "What are the main findings?"
+                      </p>
 
                     </div>
 
@@ -181,259 +259,366 @@ export default function Dashboard() {
               </div>
 
             </div>
+          </section>
 
-          </div>
+          {/* ===================================================== */}
+          {/* QUICK ACTIONS */}
+          {/* ===================================================== */}
 
-          {/* ================= QUICK ACTIONS ================= */}
+          <section className="mt-8">
 
-          <div className="grid md:grid-cols-4 gap-6 mt-10">
+            <div className="flex items-center justify-between mb-4">
 
-            <button
-              onClick={() => setOpenModal(true)}
-              className="bg-white rounded-2xl border p-6 hover:shadow-lg transition text-left"
-            >
+              <div>
+                <h2 className="text-lg font-bold text-slate-900">
+                  Quick actions
+                </h2>
 
-              <Plus className="text-blue-600" />
+                <p className="text-sm text-slate-500 mt-1">
+                  Get started with your workspace
+                </p>
+              </div>
 
-              <h3 className="font-semibold mt-5">
+            </div>
 
-                New Project
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
 
-              </h3>
+              {[
+                {
+                  icon: Plus,
+                  title: "New Project",
+                  description: "Create a workspace",
+                  iconClass: "bg-blue-50 text-blue-600",
+                  onClick: () => setOpenModal(true),
+                },
+                {
+                  icon: Upload,
+                  title: "Upload PDFs",
+                  description: "Add documents",
+                  iconClass: "bg-emerald-50 text-emerald-600",
+                },
+                {
+                  icon: MessageSquare,
+                  title: "Continue Chat",
+                  description: "Resume conversations",
+                  iconClass: "bg-purple-50 text-purple-600",
+                },
+                {
+                  icon: FolderOpen,
+                  title: "Browse Projects",
+                  description: "View all workspaces",
+                  iconClass: "bg-orange-50 text-orange-600",
+                  onClick: () =>
+                    document
+                      .getElementById("projects")
+                      ?.scrollIntoView({ behavior: "smooth" }),
+                },
+              ].map((action) => {
 
-              <p className="text-slate-500 mt-2 text-sm">
+                const Icon = action.icon;
 
-                Create a new AI workspace.
+                return (
+                  <button
+                    key={action.title}
+                    onClick={action.onClick}
+                    className="
+                      group
+                      bg-white
+                      border
+                      border-slate-200
+                      rounded-2xl
+                      p-5
+                      text-left
+                      hover:border-slate-300
+                      hover:shadow-lg
+                      transition-all
+                      duration-200
+                    "
+                  >
 
-              </p>
+                    <div
+                      className={`w-11 h-11 rounded-xl flex items-center justify-center ${action.iconClass}`}
+                    >
+                      <Icon size={20} />
+                    </div>
 
-            </button>
+                    <div className="flex items-center justify-between mt-5">
 
-            <button
-              className="bg-white rounded-2xl border p-6 hover:shadow-lg transition text-left"
-            >
+                      <div>
 
-              <Upload className="text-green-600" />
+                        <h3 className="font-semibold text-slate-900">
+                          {action.title}
+                        </h3>
 
-              <h3 className="font-semibold mt-5">
+                        <p className="text-sm text-slate-500 mt-1">
+                          {action.description}
+                        </p>
 
-                Upload PDFs
+                      </div>
 
-              </h3>
+                      <ChevronRight
+                        size={18}
+                        className="
+                          text-slate-300
+                          group-hover:text-slate-600
+                          group-hover:translate-x-1
+                          transition
+                        "
+                      />
 
-              <p className="text-slate-500 mt-2 text-sm">
+                    </div>
 
-                Add documents to your projects.
+                  </button>
+                );
+              })}
 
-              </p>
+            </div>
 
-            </button>
+          </section>
 
-            <button
-              className="bg-white rounded-2xl border p-6 hover:shadow-lg transition text-left"
-            >
+          {/* ===================================================== */}
+          {/* STATS */}
+          {/* ===================================================== */}
 
-              <MessageSquare className="text-purple-600" />
-
-              <h3 className="font-semibold mt-5">
-
-                Continue Chat
-
-              </h3>
-
-              <p className="text-slate-500 mt-2 text-sm">
-
-                Resume previous conversations.
-
-              </p>
-
-            </button>
-
-            <button
-              className="bg-white rounded-2xl border p-6 hover:shadow-lg transition text-left"
-            >
-
-              <FolderOpen className="text-orange-600" />
-
-              <h3 className="font-semibold mt-5">
-
-                Browse Projects
-
-              </h3>
-
-              <p className="text-slate-500 mt-2 text-sm">
-
-                Open an existing workspace.
-
-              </p>
-
-            </button>
-
-          </div>
-
-          {/* ================= STATS ================= */}
-
-          <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-6 mt-10">
+          <section className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
 
             {[
               {
                 icon: FolderOpen,
                 title: "Projects",
                 value: projects.length,
-                color: "blue",
+                description: "Workspaces",
+                className: "text-blue-600 bg-blue-50",
               },
               {
                 icon: FileText,
                 title: "Documents",
                 value: "--",
-                color: "green",
+                description: "PDF files",
+                className: "text-emerald-600 bg-emerald-50",
               },
               {
-                icon: Sparkles,
+                icon: MessageSquare,
                 title: "AI Chats",
                 value: "--",
-                color: "purple",
+                description: "Conversations",
+                className: "text-purple-600 bg-purple-50",
               },
               {
                 icon: Database,
                 title: "Storage",
                 value: "--",
-                color: "orange",
+                description: "Used storage",
+                className: "text-orange-600 bg-orange-50",
               },
-            ].map((item) => (
+            ].map((item) => {
 
-              <div
-                key={item.title}
-                className="bg-white rounded-2xl border p-6 hover:shadow-lg transition"
-              >
+              const Icon = item.icon;
 
-                <item.icon
-                  size={28}
-                  className={`text-${item.color}-600`}
-                />
+              return (
+                <div
+                  key={item.title}
+                  className="
+                    bg-white
+                    border
+                    border-slate-200
+                    rounded-2xl
+                    p-5
+                    hover:shadow-md
+                    transition
+                  "
+                >
 
-                <p className="mt-6 text-slate-500">
+                  <div className="flex items-center justify-between">
 
-                  {item.title}
+                    <div
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center ${item.className}`}
+                    >
+                      <Icon size={20} />
+                    </div>
 
-                </p>
+                  </div>
 
-                <h2 className="text-4xl font-bold mt-2">
+                  <p className="text-sm text-slate-500 mt-5">
+                    {item.title}
+                  </p>
 
-                  {item.value}
+                  <div className="flex items-end gap-2 mt-1">
 
-                </h2>
+                    <h2 className="text-3xl font-bold text-slate-900">
+                      {item.value}
+                    </h2>
 
-              </div>
+                    <span className="text-xs text-slate-400 mb-1">
+                      {item.description}
+                    </span>
 
-            ))}
+                  </div>
 
-          </div>
+                </div>
+              );
+            })}
 
-          {/* ================= SEARCH ================= */}
+          </section>
 
-          <div className="mt-10">
+          {/* ===================================================== */}
+          {/* SEARCH */}
+          {/* ===================================================== */}
 
-            <div className="bg-white rounded-2xl shadow-sm border p-2 flex items-center">
+          <section className="mt-10">
+
+            <div className="relative">
 
               <Search
-                className="ml-4 text-slate-400"
-                size={22}
+                size={20}
+                className="
+                  absolute
+                  left-5
+                  top-1/2
+                  -translate-y-1/2
+                  text-slate-400
+                "
               />
 
               <input
                 value={search}
-                onChange={(e) =>
-                  setSearch(e.target.value)
-                }
-                placeholder="Search projects..."
-                className="flex-1 px-4 py-3 outline-none bg-transparent"
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search your projects..."
+                className="
+                  w-full
+                  bg-white
+                  border
+                  border-slate-200
+                  rounded-2xl
+                  pl-14
+                  pr-5
+                  py-4
+                  outline-none
+                  text-slate-900
+                  placeholder:text-slate-400
+                  focus:border-blue-400
+                  focus:ring-4
+                  focus:ring-blue-500/10
+                  transition
+                  shadow-sm
+                "
               />
 
             </div>
 
-          </div>
-          {/* ================= PROJECTS ================= */}
+          </section>
 
-          <div className="mt-14">
+          {/* ===================================================== */}
+          {/* PROJECTS */}
+          {/* ===================================================== */}
 
-            <div className="flex items-center justify-between mb-8">
+          <section
+            id="projects"
+            className="mt-12"
+          >
+
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-7">
 
               <div>
 
-                <h2 className="text-3xl font-bold text-slate-900">
-                  Your Projects
-                </h2>
+                <div className="flex items-center gap-2">
+
+                  <h2 className="text-2xl font-bold text-slate-900">
+                    Your Projects
+                  </h2>
+
+                  <span className="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold">
+                    {filteredProjects.length}
+                  </span>
+
+                </div>
 
                 <p className="text-slate-500 mt-2">
-                  Organize your PDFs into AI-powered workspaces.
+                  Your AI-powered document workspaces.
                 </p>
 
               </div>
 
-              <div className="flex items-center gap-2 text-slate-500">
-
-                <FolderOpen size={18} />
-
-                <span>
-                  {filteredProjects.length} Project
-                  {filteredProjects.length !== 1 ? "s" : ""}
-                </span>
-
-              </div>
+              {projects.length > 0 && (
+                <button
+                  onClick={() => setOpenModal(true)}
+                  className="
+                    inline-flex
+                    items-center
+                    gap-2
+                    text-sm
+                    font-semibold
+                    text-blue-600
+                    hover:text-blue-700
+                  "
+                >
+                  <Plus size={17} />
+                  New Project
+                </button>
+              )}
 
             </div>
 
-            <div className="grid lg:grid-cols-3 gap-8">
+            <div className="grid lg:grid-cols-[1fr_330px] gap-7">
 
-              {/* LEFT */}
+              {/* PROJECT LIST */}
 
-              <div className="lg:col-span-2">
+              <div>
 
                 {filteredProjects.length === 0 ? (
 
-                  <div className="bg-white rounded-3xl border shadow-sm p-16 text-center">
+                  <div className="bg-white border border-slate-200 rounded-3xl p-12 sm:p-16 text-center">
 
-                    <FolderOpen
-                      size={70}
-                      className="mx-auto text-slate-300"
-                    />
+                    <div className="mx-auto w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center">
 
-                    <h2 className="text-3xl font-bold mt-8">
-                      No Projects Yet
+                      <FolderOpen
+                        size={30}
+                        className="text-blue-500"
+                      />
+
+                    </div>
+
+                    <h2 className="text-2xl font-bold text-slate-900 mt-6">
+                      {search
+                        ? "No projects found"
+                        : "Create your first project"}
                     </h2>
 
-                    <p className="mt-4 text-slate-500 max-w-md mx-auto leading-7">
+                    <p className="mt-3 text-slate-500 max-w-md mx-auto leading-7">
 
-                      Create your first project, upload PDFs,
-                      and start chatting with your documents
-                      using AI.
+                      {search
+                        ? "Try searching with a different project name."
+                        : "Create a workspace, upload your PDFs, and start asking questions with AI."}
 
                     </p>
 
-                    <Button
-                      onClick={() => setOpenModal(true)}
-                      className="mt-8"
-                    >
-                      <Plus size={18} />
-
-                      <span className="ml-2">
-                        Create First Project
-                      </span>
-
-                    </Button>
+                    {!search && (
+                      <Button
+                        onClick={() => setOpenModal(true)}
+                        className="mt-7"
+                      >
+                        <Plus size={18} />
+                        <span className="ml-2">
+                          Create Project
+                        </span>
+                      </Button>
+                    )}
 
                   </div>
 
                 ) : (
 
-                  <div className="grid md:grid-cols-2 gap-8">
+                  <div className="grid md:grid-cols-2 gap-5">
 
                     {filteredProjects.map((project) => (
 
                       <div
                         key={project.id}
-                        className="transition hover:-translate-y-1"
+                        className="
+                          transition-all
+                          duration-200
+                          hover:-translate-y-1
+                        "
                       >
 
                         <ProjectCard
@@ -453,35 +638,47 @@ export default function Dashboard() {
 
               </div>
 
-              {/* RIGHT SIDEBAR */}
+              {/* SIDEBAR */}
 
-              <div className="space-y-6">
+              <aside className="space-y-5">
 
                 {/* Activity */}
 
-                <div className="bg-white rounded-3xl border shadow-sm p-6">
+                <div className="bg-white border border-slate-200 rounded-3xl p-6">
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-3">
 
-                    <Clock
-                      size={20}
-                      className="text-blue-600"
-                    />
+                    <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center">
 
-                    <h3 className="font-semibold text-lg">
-                      Recent Activity
-                    </h3>
+                      <Clock
+                        size={18}
+                        className="text-blue-600"
+                      />
+
+                    </div>
+
+                    <div>
+
+                      <h3 className="font-bold text-slate-900">
+                        Getting started
+                      </h3>
+
+                      <p className="text-xs text-slate-500">
+                        Your AI workflow
+                      </p>
+
+                    </div>
 
                   </div>
 
-                  <div className="space-y-5 mt-6">
+                  <div className="mt-6 space-y-5">
 
                     <div className="flex gap-3">
 
-                      <div className="bg-blue-100 p-2 rounded-xl h-fit">
+                      <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
 
                         <Upload
-                          size={18}
+                          size={15}
                           className="text-blue-600"
                         />
 
@@ -489,16 +686,12 @@ export default function Dashboard() {
 
                       <div>
 
-                        <p className="font-medium">
-
-                          Upload your first PDF
-
+                        <p className="text-sm font-semibold text-slate-800">
+                          Upload a PDF
                         </p>
 
-                        <p className="text-sm text-slate-500">
-
-                          Documents become searchable by AI.
-
+                        <p className="text-xs text-slate-500 mt-1 leading-5">
+                          Add a document to your project.
                         </p>
 
                       </div>
@@ -507,10 +700,10 @@ export default function Dashboard() {
 
                     <div className="flex gap-3">
 
-                      <div className="bg-purple-100 p-2 rounded-xl h-fit">
+                      <div className="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center shrink-0">
 
                         <Brain
-                          size={18}
+                          size={15}
                           className="text-purple-600"
                         />
 
@@ -518,16 +711,12 @@ export default function Dashboard() {
 
                       <div>
 
-                        <p className="font-medium">
-
-                          Start chatting
-
+                        <p className="text-sm font-semibold text-slate-800">
+                          Ask a question
                         </p>
 
-                        <p className="text-sm text-slate-500">
-
-                          Ask questions about uploaded files.
-
+                        <p className="text-xs text-slate-500 mt-1 leading-5">
+                          Let AI search your documents.
                         </p>
 
                       </div>
@@ -536,27 +725,23 @@ export default function Dashboard() {
 
                     <div className="flex gap-3">
 
-                      <div className="bg-green-100 p-2 rounded-xl h-fit">
+                      <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center shrink-0">
 
-                        <FileText
-                          size={18}
-                          className="text-green-600"
+                        <Sparkles
+                          size={15}
+                          className="text-emerald-600"
                         />
 
                       </div>
 
                       <div>
 
-                        <p className="font-medium">
-
-                          AI understands context
-
+                        <p className="text-sm font-semibold text-slate-800">
+                          Get insights
                         </p>
 
-                        <p className="text-sm text-slate-500">
-
-                          Semantic search finds relevant answers.
-
+                        <p className="text-xs text-slate-500 mt-1 leading-5">
+                          Find information across your files.
                         </p>
 
                       </div>
@@ -567,72 +752,85 @@ export default function Dashboard() {
 
                 </div>
 
-                {/* Tips */}
+                {/* AI TIP */}
 
-                <div className="rounded-3xl bg-gradient-to-br from-indigo-600 to-blue-600 p-6 text-white shadow-lg">
+                <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 p-6 text-white shadow-lg">
 
-                  <Sparkles size={30} />
+                  <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-white/10 blur-xl" />
 
-                  <h3 className="text-2xl font-bold mt-5">
+                  <div className="relative">
 
-                    AI Tip
+                    <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center">
 
-                  </h3>
+                      <Sparkles size={20} />
 
-                  <p className="mt-4 text-blue-100 leading-7">
+                    </div>
 
-                    Ask complete questions like:
+                    <h3 className="text-xl font-bold mt-5">
+                      Ask better questions
+                    </h3>
 
-                  </p>
+                    <p className="text-sm text-blue-100 mt-2 leading-6">
+                      Specific questions help AI find more relevant
+                      information from your documents.
+                    </p>
 
-                  <div className="mt-5 bg-white/10 rounded-2xl p-4 text-sm leading-6">
+                    <div className="mt-5 space-y-2">
 
-                    "Summarize this research paper."
+                      {[
+                        "Summarize this document",
+                        "What are the key findings?",
+                        "List the technical skills",
+                      ].map((question) => (
 
-                    <br /><br />
+                        <div
+                          key={question}
+                          className="
+                            rounded-xl
+                            bg-white/10
+                            border
+                            border-white/10
+                            px-3
+                            py-2.5
+                            text-xs
+                            text-blue-50
+                          "
+                        >
+                          "{question}"
+                        </div>
 
-                    "List all technical skills from my resume."
+                      ))}
 
-                    <br /><br />
+                    </div>
 
-                    "What are the key findings?"
+                    <button
+                      className="
+                        mt-5
+                        inline-flex
+                        items-center
+                        gap-2
+                        text-sm
+                        font-semibold
+                        text-white
+                        hover:text-blue-100
+                      "
+                    >
+                      Explore AI
+                      <ArrowRight size={16} />
+                    </button>
 
                   </div>
 
-                  <button
-                    className="
-                      mt-6
-                      bg-white
-                      text-blue-700
-                      px-5
-                      py-3
-                      rounded-xl
-                      font-semibold
-                      flex
-                      items-center
-                      gap-2
-                      hover:bg-slate-100
-                      transition
-                    "
-                  >
-
-                    Explore AI
-
-                    <ArrowRight size={18} />
-
-                  </button>
-
                 </div>
 
-              </div>
+              </aside>
 
             </div>
 
-          </div>
+          </section>
 
         </div>
-
-      </div>
+      </main>
 
       <CreateProjectModal
         open={openModal}
