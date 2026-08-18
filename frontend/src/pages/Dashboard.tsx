@@ -9,11 +9,14 @@ import {
   Database,
   Plus,
   ArrowRight,
-  Clock,
+  Clock3,
   MessageSquare,
   Upload,
   Brain,
   ChevronRight,
+  Command,
+  Zap,
+  BarChart3,
 } from "lucide-react";
 
 import Layout from "../components/layout/Layout";
@@ -57,45 +60,144 @@ export default function Dashboard() {
     <Layout>
       <Header />
 
-      <main className="min-h-screen bg-[#f7f9fc]">
-        <div className="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-10 py-8">
+      <main className="min-h-screen bg-[#f8fafc]">
 
-          {/* ===================================================== */}
-          {/* HERO */}
-          {/* ===================================================== */}
+        {/* =========================================================
+            HERO
+        ========================================================= */}
 
-          <section className="relative overflow-hidden rounded-[28px] bg-slate-950 shadow-2xl">
+        <section className="px-4 sm:px-6 lg:px-8 pt-6">
+
+          <div
+            className="
+              relative
+              max-w-7xl
+              mx-auto
+              overflow-hidden
+              rounded-[28px]
+              bg-[#0b1220]
+              border
+              border-slate-800
+              shadow-2xl
+            "
+          >
 
             {/* Background decoration */}
 
-            <div className="absolute inset-0">
-              <div className="absolute -top-32 -right-20 w-96 h-96 bg-blue-600/30 rounded-full blur-3xl" />
-              <div className="absolute -bottom-40 left-1/3 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl" />
-              <div className="absolute top-20 left-1/2 w-40 h-40 bg-cyan-400/10 rounded-full blur-2xl" />
+            <div className="absolute inset-0 pointer-events-none">
+
+              <div
+                className="
+                  absolute
+                  -top-32
+                  -right-32
+                  w-[420px]
+                  h-[420px]
+                  rounded-full
+                  bg-blue-600/20
+                  blur-3xl
+                "
+              />
+
+              <div
+                className="
+                  absolute
+                  -bottom-40
+                  left-1/3
+                  w-[500px]
+                  h-[300px]
+                  rounded-full
+                  bg-indigo-600/10
+                  blur-3xl
+                "
+              />
+
+              <div
+                className="
+                  absolute
+                  inset-0
+                  opacity-[0.04]
+                  bg-[radial-gradient(#ffffff_1px,transparent_1px)]
+                  [background-size:24px_24px]
+                "
+              />
+
             </div>
 
-            <div className="relative grid lg:grid-cols-[1.2fr_0.8fr] gap-10 items-center p-8 sm:p-10 lg:p-12">
+            <div
+              className="
+                relative
+                grid
+                lg:grid-cols-[1.15fr_0.85fr]
+                gap-12
+                items-center
+                px-7
+                py-10
+                sm:px-10
+                sm:py-12
+                lg:px-14
+                lg:py-14
+              "
+            >
 
-              {/* Hero text */}
+              {/* HERO CONTENT */}
 
-              <div className="max-w-2xl">
+              <div>
 
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.07] px-4 py-2 text-sm text-blue-100 backdrop-blur">
-                  <Sparkles size={15} className="text-cyan-300" />
-                  AI-powered document workspace
+                <div
+                  className="
+                    inline-flex
+                    items-center
+                    gap-2
+                    px-3
+                    py-1.5
+                    rounded-full
+                    border
+                    border-blue-400/20
+                    bg-blue-500/10
+                    text-blue-200
+                    text-xs
+                    font-semibold
+                  "
+                >
+
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+
+                  AI RESEARCH WORKSPACE
+
                 </div>
 
-                <h1 className="mt-6 text-4xl sm:text-5xl lg:text-[54px] font-bold tracking-tight text-white leading-[1.08]">
+                <h1
+                  className="
+                    mt-6
+                    text-4xl
+                    sm:text-5xl
+                    lg:text-[54px]
+                    font-bold
+                    tracking-tight
+                    text-white
+                    leading-[1.05]
+                  "
+                >
                   Your documents.
-                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-400">
+                  <span className="block text-blue-400">
                     Your AI assistant.
                   </span>
                 </h1>
 
-                <p className="mt-6 text-base sm:text-lg text-slate-300 leading-8 max-w-xl">
-                  Upload your PDFs, organize them into projects, and ask
-                  questions using natural language. Your documents become
-                  searchable knowledge.
+                <p
+                  className="
+                    mt-6
+                    max-w-xl
+                    text-base
+                    sm:text-lg
+                    text-slate-400
+                    leading-7
+                  "
+                >
+                  Upload your research papers, resumes, reports and
+                  documents. Search, understand and chat with your
+                  knowledge base using AI.
                 </p>
 
                 <div className="flex flex-wrap gap-3 mt-8">
@@ -103,38 +205,41 @@ export default function Dashboard() {
                   <Button
                     onClick={() => setOpenModal(true)}
                     className="
-                      !bg-white
-                      !text-slate-900
-                      hover:!bg-blue-50
+                      !bg-blue-600
+                      hover:!bg-blue-500
+                      !text-white
                       px-6
-                      py-3
+                      py-3.5
                       rounded-xl
                       font-semibold
                       shadow-lg
+                      shadow-blue-600/20
                       transition-all
                       hover:-translate-y-0.5
                     "
                   >
                     <Plus size={18} />
-                    <span className="ml-2">Create Project</span>
+
+                    <span className="ml-2">
+                      New Project
+                    </span>
                   </Button>
 
                   <button
                     onClick={() =>
                       document
                         .getElementById("projects")
-                        ?.scrollIntoView({ behavior: "smooth" })
+                        ?.scrollIntoView({
+                          behavior: "smooth",
+                        })
                     }
                     className="
-                      inline-flex
-                      items-center
-                      gap-2
                       px-6
-                      py-3
+                      py-3.5
                       rounded-xl
                       border
                       border-white/15
-                      bg-white/[0.05]
+                      bg-white/5
                       text-white
                       font-medium
                       hover:bg-white/10
@@ -142,694 +247,747 @@ export default function Dashboard() {
                     "
                   >
                     View Projects
-                    <ArrowRight size={17} />
                   </button>
 
                 </div>
 
-              </div>
+                {/* Small trust indicators */}
 
-              {/* AI preview */}
-
-              <div className="hidden lg:block">
-
-                <div className="rounded-3xl border border-white/10 bg-white/[0.07] backdrop-blur-xl p-5 shadow-2xl">
-
-                  <div className="flex items-center justify-between mb-5">
-
-                    <div className="flex items-center gap-3">
-
-                      <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
-                        <Brain
-                          size={21}
-                          className="text-cyan-300"
-                        />
-                      </div>
-
-                      <div>
-                        <p className="text-white font-semibold">
-                          AI Workspace
-                        </p>
-
-                        <p className="text-xs text-slate-400">
-                          Ready to answer
-                        </p>
-                      </div>
-
-                    </div>
-
-                    <div className="w-2.5 h-2.5 bg-emerald-400 rounded-full shadow-[0_0_12px_rgba(52,211,153,0.8)]" />
-
-                  </div>
-
-                  <div className="space-y-3">
-
-                    <div className="flex items-center gap-3 rounded-2xl bg-white/[0.06] border border-white/5 p-4">
-
-                      <div className="w-9 h-9 rounded-lg bg-red-500/15 flex items-center justify-center">
-                        <FileText
-                          size={18}
-                          className="text-red-300"
-                        />
-                      </div>
-
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm text-white font-medium">
-                          Research Paper.pdf
-                        </p>
-
-                        <p className="text-xs text-slate-400">
-                          12 pages
-                        </p>
-                      </div>
-
-                      <span className="text-xs text-emerald-300">
-                        Indexed
-                      </span>
-
-                    </div>
-
-                    <div className="flex items-center gap-3 rounded-2xl bg-white/[0.06] border border-white/5 p-4">
-
-                      <div className="w-9 h-9 rounded-lg bg-blue-500/15 flex items-center justify-center">
-                        <FileText
-                          size={18}
-                          className="text-blue-300"
-                        />
-                      </div>
-
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm text-white font-medium">
-                          Resume.pdf
-                        </p>
-
-                        <p className="text-xs text-slate-400">
-                          3 pages
-                        </p>
-                      </div>
-
-                      <span className="text-xs text-emerald-300">
-                        Indexed
-                      </span>
-
-                    </div>
-
-                    <div className="rounded-2xl bg-cyan-400 p-4 text-slate-950">
-
-                      <div className="flex items-center gap-2">
-
-                        <MessageSquare size={17} />
-
-                        <span className="text-sm font-semibold">
-                          Ask your documents
-                        </span>
-
-                      </div>
-
-                      <p className="mt-2 text-sm text-slate-800/80">
-                        "What are the main findings?"
-                      </p>
-
-                    </div>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-          </section>
-
-          {/* ===================================================== */}
-          {/* QUICK ACTIONS */}
-          {/* ===================================================== */}
-
-          <section className="mt-8">
-
-            <div className="flex items-center justify-between mb-4">
-
-              <div>
-                <h2 className="text-lg font-bold text-slate-900">
-                  Quick actions
-                </h2>
-
-                <p className="text-sm text-slate-500 mt-1">
-                  Get started with your workspace
-                </p>
-              </div>
-
-            </div>
-
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-
-              {[
-                {
-                  icon: Plus,
-                  title: "New Project",
-                  description: "Create a workspace",
-                  iconClass: "bg-blue-50 text-blue-600",
-                  onClick: () => setOpenModal(true),
-                },
-                {
-                  icon: Upload,
-                  title: "Upload PDFs",
-                  description: "Add documents",
-                  iconClass: "bg-emerald-50 text-emerald-600",
-                },
-                {
-                  icon: MessageSquare,
-                  title: "Continue Chat",
-                  description: "Resume conversations",
-                  iconClass: "bg-purple-50 text-purple-600",
-                },
-                {
-                  icon: FolderOpen,
-                  title: "Browse Projects",
-                  description: "View all workspaces",
-                  iconClass: "bg-orange-50 text-orange-600",
-                  onClick: () =>
-                    document
-                      .getElementById("projects")
-                      ?.scrollIntoView({ behavior: "smooth" }),
-                },
-              ].map((action) => {
-
-                const Icon = action.icon;
-
-                return (
-                  <button
-                    key={action.title}
-                    onClick={action.onClick}
-                    className="
-                      group
-                      bg-white
-                      border
-                      border-slate-200
-                      rounded-2xl
-                      p-5
-                      text-left
-                      hover:border-slate-300
-                      hover:shadow-lg
-                      transition-all
-                      duration-200
-                    "
-                  >
-
-                    <div
-                      className={`w-11 h-11 rounded-xl flex items-center justify-center ${action.iconClass}`}
-                    >
-                      <Icon size={20} />
-                    </div>
-
-                    <div className="flex items-center justify-between mt-5">
-
-                      <div>
-
-                        <h3 className="font-semibold text-slate-900">
-                          {action.title}
-                        </h3>
-
-                        <p className="text-sm text-slate-500 mt-1">
-                          {action.description}
-                        </p>
-
-                      </div>
-
-                      <ChevronRight
-                        size={18}
-                        className="
-                          text-slate-300
-                          group-hover:text-slate-600
-                          group-hover:translate-x-1
-                          transition
-                        "
-                      />
-
-                    </div>
-
-                  </button>
-                );
-              })}
-
-            </div>
-
-          </section>
-
-          {/* ===================================================== */}
-          {/* STATS */}
-          {/* ===================================================== */}
-
-          <section className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
-
-            {[
-              {
-                icon: FolderOpen,
-                title: "Projects",
-                value: projects.length,
-                description: "Workspaces",
-                className: "text-blue-600 bg-blue-50",
-              },
-              {
-                icon: FileText,
-                title: "Documents",
-                value: "--",
-                description: "PDF files",
-                className: "text-emerald-600 bg-emerald-50",
-              },
-              {
-                icon: MessageSquare,
-                title: "AI Chats",
-                value: "--",
-                description: "Conversations",
-                className: "text-purple-600 bg-purple-50",
-              },
-              {
-                icon: Database,
-                title: "Storage",
-                value: "--",
-                description: "Used storage",
-                className: "text-orange-600 bg-orange-50",
-              },
-            ].map((item) => {
-
-              const Icon = item.icon;
-
-              return (
                 <div
-                  key={item.title}
                   className="
-                    bg-white
-                    border
-                    border-slate-200
-                    rounded-2xl
-                    p-5
-                    hover:shadow-md
-                    transition
+                    flex
+                    flex-wrap
+                    items-center
+                    gap-x-6
+                    gap-y-3
+                    mt-8
+                    text-sm
+                    text-slate-500
                   "
                 >
 
-                  <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-2">
+                    <Zap size={15} className="text-blue-400" />
+                    Semantic Search
+                  </span>
 
-                    <div
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center ${item.className}`}
-                    >
-                      <Icon size={20} />
-                    </div>
+                  <span className="flex items-center gap-2">
+                    <Brain size={15} className="text-purple-400" />
+                    AI-Powered Answers
+                  </span>
 
-                  </div>
-
-                  <p className="text-sm text-slate-500 mt-5">
-                    {item.title}
-                  </p>
-
-                  <div className="flex items-end gap-2 mt-1">
-
-                    <h2 className="text-3xl font-bold text-slate-900">
-                      {item.value}
-                    </h2>
-
-                    <span className="text-xs text-slate-400 mb-1">
-                      {item.description}
-                    </span>
-
-                  </div>
-
-                </div>
-              );
-            })}
-
-          </section>
-
-          {/* ===================================================== */}
-          {/* SEARCH */}
-          {/* ===================================================== */}
-
-          <section className="mt-10">
-
-            <div className="relative">
-
-              <Search
-                size={20}
-                className="
-                  absolute
-                  left-5
-                  top-1/2
-                  -translate-y-1/2
-                  text-slate-400
-                "
-              />
-
-              <input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search your projects..."
-                className="
-                  w-full
-                  bg-white
-                  border
-                  border-slate-200
-                  rounded-2xl
-                  pl-14
-                  pr-5
-                  py-4
-                  outline-none
-                  text-slate-900
-                  placeholder:text-slate-400
-                  focus:border-blue-400
-                  focus:ring-4
-                  focus:ring-blue-500/10
-                  transition
-                  shadow-sm
-                "
-              />
-
-            </div>
-
-          </section>
-
-          {/* ===================================================== */}
-          {/* PROJECTS */}
-          {/* ===================================================== */}
-
-          <section
-            id="projects"
-            className="mt-12"
-          >
-
-            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-7">
-
-              <div>
-
-                <div className="flex items-center gap-2">
-
-                  <h2 className="text-2xl font-bold text-slate-900">
-                    Your Projects
-                  </h2>
-
-                  <span className="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold">
-                    {filteredProjects.length}
+                  <span className="flex items-center gap-2">
+                    <Database size={15} className="text-cyan-400" />
+                    Private Knowledge Base
                   </span>
 
                 </div>
 
-                <p className="text-slate-500 mt-2">
-                  Your AI-powered document workspaces.
-                </p>
+              </div>
+
+              {/* PRODUCT PREVIEW */}
+
+              <div className="relative hidden lg:block">
+
+                <div
+                  className="
+                    absolute
+                    -inset-6
+                    bg-blue-500/10
+                    blur-3xl
+                    rounded-full
+                  "
+                />
+
+                <div
+                  className="
+                    relative
+                    rounded-3xl
+                    border
+                    border-white/10
+                    bg-white/[0.06]
+                    backdrop-blur-xl
+                    p-5
+                    shadow-2xl
+                  "
+                >
+
+                  {/* Window header */}
+
+                  <div className="flex items-center justify-between">
+
+                    <div className="flex gap-1.5">
+
+                      <span className="w-2.5 h-2.5 rounded-full bg-red-400/70" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-yellow-400/70" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-green-400/70" />
+
+                    </div>
+
+                    <span className="text-xs text-slate-500">
+                      AI Workspace
+                    </span>
+
+                    <Command
+                      size={15}
+                      className="text-slate-500"
+                    />
+
+                  </div>
+
+                  {/* Search */}
+
+                  <div
+                    className="
+                      mt-5
+                      rounded-xl
+                      border
+                      border-white/10
+                      bg-black/20
+                      px-4
+                      py-3
+                      flex
+                      items-center
+                      gap-3
+                    "
+                  >
+
+                    <Search
+                      size={17}
+                      className="text-slate-500"
+                    />
+
+                    <span className="text-sm text-slate-400">
+                      Ask anything about your documents...
+                    </span>
+
+                  </div>
+
+                  {/* Documents */}
+
+                  <div className="mt-5 space-y-3">
+
+                    <div
+                      className="
+                        flex
+                        items-center
+                        gap-3
+                        p-3
+                        rounded-xl
+                        bg-white/[0.05]
+                        border
+                        border-white/5
+                      "
+                    >
+
+                      <div className="p-2 rounded-lg bg-red-500/10">
+                        <FileText
+                          size={17}
+                          className="text-red-400"
+                        />
+                      </div>
+
+                      <div className="flex-1">
+
+                        <p className="text-sm text-white">
+                          Research_Paper.pdf
+                        </p>
+
+                        <p className="text-xs text-slate-500">
+                          2.4 MB · 18 pages
+                        </p>
+
+                      </div>
+
+                      <span className="text-xs text-green-400">
+                        Indexed
+                      </span>
+
+                    </div>
+
+                    <div
+                      className="
+                        flex
+                        items-center
+                        gap-3
+                        p-3
+                        rounded-xl
+                        bg-white/[0.05]
+                        border
+                        border-white/5
+                      "
+                    >
+
+                      <div className="p-2 rounded-lg bg-blue-500/10">
+                        <FileText
+                          size={17}
+                          className="text-blue-400"
+                        />
+                      </div>
+
+                      <div className="flex-1">
+
+                        <p className="text-sm text-white">
+                          Resume.pdf
+                        </p>
+
+                        <p className="text-xs text-slate-500">
+                          840 KB · 3 pages
+                        </p>
+
+                      </div>
+
+                      <span className="text-xs text-green-400">
+                        Indexed
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                  {/* AI response */}
+
+                  <div
+                    className="
+                      mt-4
+                      rounded-xl
+                      bg-blue-500/10
+                      border
+                      border-blue-400/10
+                      p-4
+                    "
+                  >
+
+                    <div className="flex gap-2 items-center">
+
+                      <div className="p-1.5 rounded-lg bg-blue-500/20">
+                        <Sparkles
+                          size={14}
+                          className="text-blue-300"
+                        />
+                      </div>
+
+                      <span className="text-xs font-semibold text-blue-200">
+                        AI Response
+                      </span>
+
+                    </div>
+
+                    <p className="mt-3 text-sm text-slate-300 leading-6">
+                      I found 4 relevant sections in your documents
+                      related to this question...
+                    </p>
+
+                  </div>
+
+                </div>
 
               </div>
 
-              {projects.length > 0 && (
-                <button
-                  onClick={() => setOpenModal(true)}
+            </div>
+
+          </div>
+
+        </section>
+
+        {/* =========================================================
+            STATS
+        ========================================================= */}
+
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+
+            <StatCard
+              icon={FolderOpen}
+              label="Projects"
+              value={projects.length}
+              iconClass="text-blue-600"
+              bgClass="bg-blue-50"
+            />
+
+            <StatCard
+              icon={FileText}
+              label="Documents"
+              value="--"
+              iconClass="text-emerald-600"
+              bgClass="bg-emerald-50"
+            />
+
+            <StatCard
+              icon={MessageSquare}
+              label="AI Conversations"
+              value="--"
+              iconClass="text-violet-600"
+              bgClass="bg-violet-50"
+            />
+
+            <StatCard
+              icon={Database}
+              label="Storage Used"
+              value="--"
+              iconClass="text-orange-600"
+              bgClass="bg-orange-50"
+            />
+
+          </div>
+
+        </section>
+
+        {/* =========================================================
+            QUICK ACTIONS
+        ========================================================= */}
+
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+
+          <div className="flex items-center justify-between mb-4">
+
+            <div>
+
+              <h2 className="text-lg font-bold text-slate-900">
+                Quick Actions
+              </h2>
+
+              <p className="text-sm text-slate-500 mt-1">
+                Get started with your workspace.
+              </p>
+
+            </div>
+
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+            <QuickAction
+              icon={Plus}
+              title="New Project"
+              description="Create a workspace"
+              iconClass="text-blue-600"
+              bgClass="bg-blue-50"
+              onClick={() => setOpenModal(true)}
+            />
+
+            <QuickAction
+              icon={Upload}
+              title="Upload Documents"
+              description="Add PDFs to a project"
+              iconClass="text-emerald-600"
+              bgClass="bg-emerald-50"
+            />
+
+            <QuickAction
+              icon={MessageSquare}
+              title="Continue Chat"
+              description="Resume a conversation"
+              iconClass="text-violet-600"
+              bgClass="bg-violet-50"
+            />
+
+            <QuickAction
+              icon={FolderOpen}
+              title="Browse Projects"
+              description="Open your workspace"
+              iconClass="text-orange-600"
+              bgClass="bg-orange-50"
+              onClick={() =>
+                document
+                  .getElementById("projects")
+                  ?.scrollIntoView({
+                    behavior: "smooth",
+                  })
+              }
+            />
+
+          </div>
+
+        </section>
+
+        {/* =========================================================
+            PROJECTS
+        ========================================================= */}
+
+        <section
+          id="projects"
+          className="
+            max-w-7xl
+            mx-auto
+            px-4
+            sm:px-6
+            lg:px-8
+            mt-14
+            pb-16
+          "
+        >
+
+          <div className="grid lg:grid-cols-[1fr_300px] gap-8">
+
+            {/* MAIN */}
+
+            <div>
+
+              {/* Header */}
+
+              <div
+                className="
+                  flex
+                  flex-col
+                  sm:flex-row
+                  sm:items-end
+                  justify-between
+                  gap-5
+                  mb-6
+                "
+              >
+
+                <div>
+
+                  <div className="flex items-center gap-2">
+
+                    <h2 className="text-2xl font-bold text-slate-900">
+                      Your Projects
+                    </h2>
+
+                    <span
+                      className="
+                        px-2.5
+                        py-1
+                        rounded-full
+                        bg-slate-100
+                        text-slate-600
+                        text-xs
+                        font-semibold
+                      "
+                    >
+                      {filteredProjects.length}
+                    </span>
+
+                  </div>
+
+                  <p className="text-slate-500 mt-1">
+                    Your AI-powered document workspaces.
+                  </p>
+
+                </div>
+
+                {/* Search */}
+
+                <div
                   className="
-                    inline-flex
+                    w-full
+                    sm:w-80
+                    flex
                     items-center
-                    gap-2
-                    text-sm
-                    font-semibold
-                    text-blue-600
-                    hover:text-blue-700
+                    gap-3
+                    px-4
+                    py-2.5
+                    bg-white
+                    border
+                    border-slate-200
+                    rounded-xl
+                    shadow-sm
+                    focus-within:ring-2
+                    focus-within:ring-blue-500/20
+                    focus-within:border-blue-400
                   "
                 >
-                  <Plus size={17} />
-                  New Project
-                </button>
+
+                  <Search
+                    size={18}
+                    className="text-slate-400"
+                  />
+
+                  <input
+                    value={search}
+                    onChange={(e) =>
+                      setSearch(e.target.value)
+                    }
+                    placeholder="Search projects..."
+                    className="
+                      flex-1
+                      bg-transparent
+                      outline-none
+                      text-sm
+                      text-slate-700
+                      placeholder:text-slate-400
+                    "
+                  />
+
+                  <span className="hidden sm:flex text-[10px] text-slate-400 border rounded px-1.5 py-0.5">
+                    ⌘ K
+                  </span>
+
+                </div>
+
+              </div>
+
+              {/* Project grid */}
+
+              {filteredProjects.length === 0 ? (
+
+                <div
+                  className="
+                    bg-white
+                    border
+                    border-slate-200
+                    rounded-3xl
+                    p-12
+                    sm:p-16
+                    text-center
+                  "
+                >
+
+                  <div
+                    className="
+                      w-16
+                      h-16
+                      mx-auto
+                      rounded-2xl
+                      bg-blue-50
+                      flex
+                      items-center
+                      justify-center
+                    "
+                  >
+
+                    <FolderOpen
+                      size={30}
+                      className="text-blue-500"
+                    />
+
+                  </div>
+
+                  <h3 className="text-xl font-bold text-slate-900 mt-5">
+                    {search
+                      ? "No projects found"
+                      : "Create your first project"}
+                  </h3>
+
+                  <p className="text-slate-500 max-w-md mx-auto mt-2 leading-6">
+                    {search
+                      ? "Try searching with a different project name."
+                      : "Create a workspace, upload your documents and start asking questions."}
+                  </p>
+
+                  {!search && (
+                    <Button
+                      onClick={() => setOpenModal(true)}
+                      className="mt-6"
+                    >
+                      <Plus size={17} />
+
+                      <span className="ml-2">
+                        Create Project
+                      </span>
+                    </Button>
+                  )}
+
+                </div>
+
+              ) : (
+
+                <div className="grid md:grid-cols-2 gap-5">
+
+                  {filteredProjects.map((project) => (
+
+                    <div
+                      key={project.id}
+                      className="
+                        transition-all
+                        duration-300
+                        hover:-translate-y-1
+                      "
+                    >
+
+                      <ProjectCard
+                        project={project}
+                        onClick={() =>
+                          navigate(`/project/${project.id}`)
+                        }
+                      />
+
+                    </div>
+
+                  ))}
+
+                </div>
+
               )}
 
             </div>
 
-            <div className="grid lg:grid-cols-[1fr_330px] gap-7">
+            {/* =====================================================
+                SIDEBAR
+            ===================================================== */}
 
-              {/* PROJECT LIST */}
+            <aside className="space-y-5">
 
-              <div>
+              {/* Recent Activity */}
 
-                {filteredProjects.length === 0 ? (
+              <div
+                className="
+                  bg-white
+                  border
+                  border-slate-200
+                  rounded-3xl
+                  p-5
+                "
+              >
 
-                  <div className="bg-white border border-slate-200 rounded-3xl p-12 sm:p-16 text-center">
+                <div className="flex items-center justify-between">
 
-                    <div className="mx-auto w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center">
+                  <div className="flex items-center gap-2">
 
-                      <FolderOpen
-                        size={30}
-                        className="text-blue-500"
-                      />
+                    <Clock3
+                      size={18}
+                      className="text-blue-600"
+                    />
 
-                    </div>
-
-                    <h2 className="text-2xl font-bold text-slate-900 mt-6">
-                      {search
-                        ? "No projects found"
-                        : "Create your first project"}
-                    </h2>
-
-                    <p className="mt-3 text-slate-500 max-w-md mx-auto leading-7">
-
-                      {search
-                        ? "Try searching with a different project name."
-                        : "Create a workspace, upload your PDFs, and start asking questions with AI."}
-
-                    </p>
-
-                    {!search && (
-                      <Button
-                        onClick={() => setOpenModal(true)}
-                        className="mt-7"
-                      >
-                        <Plus size={18} />
-                        <span className="ml-2">
-                          Create Project
-                        </span>
-                      </Button>
-                    )}
+                    <h3 className="font-bold text-slate-900">
+                      Getting Started
+                    </h3>
 
                   </div>
 
-                ) : (
+                  <span className="text-xs text-slate-400">
+                    Guide
+                  </span>
 
-                  <div className="grid md:grid-cols-2 gap-5">
+                </div>
 
-                    {filteredProjects.map((project) => (
+                <div className="mt-5 space-y-4">
 
-                      <div
-                        key={project.id}
-                        className="
-                          transition-all
-                          duration-200
-                          hover:-translate-y-1
-                        "
-                      >
+                  <ActivityItem
+                    icon={Plus}
+                    title="Create a project"
+                    description="Set up your workspace."
+                    bg="bg-blue-50"
+                    color="text-blue-600"
+                  />
 
-                        <ProjectCard
-                          project={project}
-                          onClick={() =>
-                            navigate(`/project/${project.id}`)
-                          }
-                        />
+                  <ActivityItem
+                    icon={Upload}
+                    title="Upload documents"
+                    description="Add PDFs to your project."
+                    bg="bg-emerald-50"
+                    color="text-emerald-600"
+                  />
 
-                      </div>
+                  <ActivityItem
+                    icon={MessageSquare}
+                    title="Ask your documents"
+                    description="Start an AI conversation."
+                    bg="bg-violet-50"
+                    color="text-violet-600"
+                  />
 
-                    ))}
-
-                  </div>
-
-                )}
+                </div>
 
               </div>
 
-              {/* SIDEBAR */}
+              {/* AI Tip */}
 
-              <aside className="space-y-5">
+              <div
+                className="
+                  relative
+                  overflow-hidden
+                  rounded-3xl
+                  bg-gradient-to-br
+                  from-blue-600
+                  to-indigo-700
+                  p-6
+                  text-white
+                  shadow-xl
+                  shadow-blue-600/10
+                "
+              >
 
-                {/* Activity */}
+                <div
+                  className="
+                    absolute
+                    -right-12
+                    -top-12
+                    w-32
+                    h-32
+                    rounded-full
+                    bg-white/10
+                  "
+                />
 
-                <div className="bg-white border border-slate-200 rounded-3xl p-6">
+                <div
+                  className="
+                    relative
+                    w-10
+                    h-10
+                    rounded-xl
+                    bg-white/15
+                    flex
+                    items-center
+                    justify-center
+                  "
+                >
 
-                  <div className="flex items-center gap-3">
-
-                    <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center">
-
-                      <Clock
-                        size={18}
-                        className="text-blue-600"
-                      />
-
-                    </div>
-
-                    <div>
-
-                      <h3 className="font-bold text-slate-900">
-                        Getting started
-                      </h3>
-
-                      <p className="text-xs text-slate-500">
-                        Your AI workflow
-                      </p>
-
-                    </div>
-
-                  </div>
-
-                  <div className="mt-6 space-y-5">
-
-                    <div className="flex gap-3">
-
-                      <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
-
-                        <Upload
-                          size={15}
-                          className="text-blue-600"
-                        />
-
-                      </div>
-
-                      <div>
-
-                        <p className="text-sm font-semibold text-slate-800">
-                          Upload a PDF
-                        </p>
-
-                        <p className="text-xs text-slate-500 mt-1 leading-5">
-                          Add a document to your project.
-                        </p>
-
-                      </div>
-
-                    </div>
-
-                    <div className="flex gap-3">
-
-                      <div className="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center shrink-0">
-
-                        <Brain
-                          size={15}
-                          className="text-purple-600"
-                        />
-
-                      </div>
-
-                      <div>
-
-                        <p className="text-sm font-semibold text-slate-800">
-                          Ask a question
-                        </p>
-
-                        <p className="text-xs text-slate-500 mt-1 leading-5">
-                          Let AI search your documents.
-                        </p>
-
-                      </div>
-
-                    </div>
-
-                    <div className="flex gap-3">
-
-                      <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center shrink-0">
-
-                        <Sparkles
-                          size={15}
-                          className="text-emerald-600"
-                        />
-
-                      </div>
-
-                      <div>
-
-                        <p className="text-sm font-semibold text-slate-800">
-                          Get insights
-                        </p>
-
-                        <p className="text-xs text-slate-500 mt-1 leading-5">
-                          Find information across your files.
-                        </p>
-
-                      </div>
-
-                    </div>
-
-                  </div>
+                  <Sparkles size={20} />
 
                 </div>
 
-                {/* AI TIP */}
+                <h3 className="relative text-xl font-bold mt-5">
+                  Get better answers
+                </h3>
 
-                <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 p-6 text-white shadow-lg">
+                <p className="relative mt-2 text-sm text-blue-100 leading-6">
+                  Ask specific questions instead of broad prompts.
+                </p>
 
-                  <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-white/10 blur-xl" />
+                <div
+                  className="
+                    relative
+                    mt-5
+                    bg-white/10
+                    border
+                    border-white/10
+                    rounded-2xl
+                    p-4
+                  "
+                >
 
-                  <div className="relative">
+                  <p className="text-xs text-blue-200">
+                    Try asking
+                  </p>
 
-                    <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center">
-
-                      <Sparkles size={20} />
-
-                    </div>
-
-                    <h3 className="text-xl font-bold mt-5">
-                      Ask better questions
-                    </h3>
-
-                    <p className="text-sm text-blue-100 mt-2 leading-6">
-                      Specific questions help AI find more relevant
-                      information from your documents.
-                    </p>
-
-                    <div className="mt-5 space-y-2">
-
-                      {[
-                        "Summarize this document",
-                        "What are the key findings?",
-                        "List the technical skills",
-                      ].map((question) => (
-
-                        <div
-                          key={question}
-                          className="
-                            rounded-xl
-                            bg-white/10
-                            border
-                            border-white/10
-                            px-3
-                            py-2.5
-                            text-xs
-                            text-blue-50
-                          "
-                        >
-                          "{question}"
-                        </div>
-
-                      ))}
-
-                    </div>
-
-                    <button
-                      className="
-                        mt-5
-                        inline-flex
-                        items-center
-                        gap-2
-                        text-sm
-                        font-semibold
-                        text-white
-                        hover:text-blue-100
-                      "
-                    >
-                      Explore AI
-                      <ArrowRight size={16} />
-                    </button>
-
-                  </div>
+                  <p className="mt-2 text-sm leading-6">
+                    "What are the key findings of this research paper?"
+                  </p>
 
                 </div>
 
-              </aside>
+                <button
+                  className="
+                    relative
+                    mt-5
+                    flex
+                    items-center
+                    gap-2
+                    text-sm
+                    font-semibold
+                    hover:gap-3
+                    transition-all
+                  "
+                >
 
-            </div>
+                  Learn more
 
-          </section>
+                  <ArrowRight size={16} />
 
-        </div>
+                </button>
+
+              </div>
+
+            </aside>
+
+          </div>
+
+        </section>
+
       </main>
 
       <CreateProjectModal
@@ -842,5 +1000,217 @@ export default function Dashboard() {
       />
 
     </Layout>
+  );
+}
+
+
+/* ================================================================
+   STAT CARD
+================================================================ */
+
+function StatCard({
+  icon: Icon,
+  label,
+  value,
+  iconClass,
+  bgClass,
+}: {
+  icon: React.ElementType;
+  label: string;
+  value: string | number;
+  iconClass: string;
+  bgClass: string;
+}) {
+  return (
+    <div
+      className="
+        bg-white
+        border
+        border-slate-200
+        rounded-2xl
+        p-5
+        transition
+        hover:shadow-md
+      "
+    >
+
+      <div className="flex items-center justify-between">
+
+        <div
+          className={`
+            w-10
+            h-10
+            rounded-xl
+            ${bgClass}
+            flex
+            items-center
+            justify-center
+          `}
+        >
+
+          <Icon
+            size={19}
+            className={iconClass}
+          />
+
+        </div>
+
+        <BarChart3
+          size={15}
+          className="text-slate-300"
+        />
+
+      </div>
+
+      <p className="text-sm text-slate-500 mt-5">
+        {label}
+      </p>
+
+      <p className="text-2xl font-bold text-slate-900 mt-1">
+        {value}
+      </p>
+
+    </div>
+  );
+}
+
+
+/* ================================================================
+   QUICK ACTION
+================================================================ */
+
+function QuickAction({
+  icon: Icon,
+  title,
+  description,
+  iconClass,
+  bgClass,
+  onClick,
+}: {
+  icon: React.ElementType;
+  title: string;
+  description: string;
+  iconClass: string;
+  bgClass: string;
+  onClick?: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="
+        group
+        bg-white
+        border
+        border-slate-200
+        rounded-2xl
+        p-5
+        text-left
+        transition-all
+        duration-200
+        hover:-translate-y-0.5
+        hover:shadow-md
+        hover:border-slate-300
+      "
+    >
+
+      <div className="flex items-center justify-between">
+
+        <div
+          className={`
+            w-10
+            h-10
+            rounded-xl
+            ${bgClass}
+            flex
+            items-center
+            justify-center
+          `}
+        >
+
+          <Icon
+            size={19}
+            className={iconClass}
+          />
+
+        </div>
+
+        <ChevronRight
+          size={17}
+          className="
+            text-slate-300
+            group-hover:text-slate-600
+            group-hover:translate-x-1
+            transition
+          "
+        />
+
+      </div>
+
+      <h3 className="font-semibold text-slate-900 mt-4">
+        {title}
+      </h3>
+
+      <p className="text-sm text-slate-500 mt-1">
+        {description}
+      </p>
+
+    </button>
+  );
+}
+
+
+/* ================================================================
+   ACTIVITY ITEM
+================================================================ */
+
+function ActivityItem({
+  icon: Icon,
+  title,
+  description,
+  bg,
+  color,
+}: {
+  icon: React.ElementType;
+  title: string;
+  description: string;
+  bg: string;
+  color: string;
+}) {
+  return (
+    <div className="flex gap-3">
+
+      <div
+        className={`
+          shrink-0
+          w-9
+          h-9
+          rounded-xl
+          ${bg}
+          flex
+          items-center
+          justify-center
+        `}
+      >
+
+        <Icon
+          size={16}
+          className={color}
+        />
+
+      </div>
+
+      <div>
+
+        <p className="text-sm font-semibold text-slate-900">
+          {title}
+        </p>
+
+        <p className="text-xs text-slate-500 mt-0.5 leading-5">
+          {description}
+        </p>
+
+      </div>
+
+    </div>
   );
 }
