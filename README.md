@@ -58,7 +58,7 @@ This project demonstrates how enterprise AI assistants such as ChatGPT with cust
 - Chat History
 - Multiple Questions Per Project
 
----
+## 🤖 AI Capabilities
 
 ## Dashboard
 
@@ -74,9 +74,47 @@ This project demonstrates how enterprise AI assistants such as ChatGPT with cust
 ```
                     Browser
 
-                        │
+# 🏗️ System Architecture
 
-                        ▼
+```text
+                         ┌──────────────────────┐
+                         │      Browser         │
+                         │   Next.js / React    │
+                         └──────────┬───────────┘
+                                    │
+                                    │ REST API
+                                    ▼
+                         ┌──────────────────────┐
+                         │       FastAPI        │
+                         │      Backend         │
+                         └──────────┬───────────┘
+                                    │
+                 ┌──────────────────┼──────────────────┐
+                 │                  │                  │
+                 ▼                  ▼                  ▼
+        ┌────────────────┐  ┌────────────────┐  ┌────────────────┐
+        │  PostgreSQL    │  │   AI / RAG     │  │ Object Storage │
+        │                │  │    Pipeline    │  │                │
+        │ Users          │  │ LangChain      │  │ PDF Files      │
+        │ Documents      │  │ Embeddings     │  │ MinIO / S3     │
+        │ Chats          │  │ Retrieval      │  │                │
+        │ Messages       │  │ Prompting      │  │                │
+        └────────────────┘  └───────┬────────┘  └────────────────┘
+                                    │
+                                    ▼
+                           ┌──────────────────┐
+                           │      Qdrant      │
+                           │  Vector Database │
+                           └────────┬─────────┘
+                                    │
+                                    ▼
+                           ┌──────────────────┐
+                           │       LLM        │
+                           │ Gemini / OpenAI  │
+                           └──────────────────┘
+```
+
+---
 
              React + TypeScript Frontend
 
@@ -84,12 +122,14 @@ This project demonstrates how enterprise AI assistants such as ChatGPT with cust
 
                 Axios REST API Calls
 
-                        │
+The core intelligence of the application is based on **Retrieval-Augmented Generation (RAG)**.
 
                         ▼
 
                  FastAPI Backend
 
+```text
+                    PDF Upload
                         │
 
         ┌───────────────┼────────────────┐
@@ -105,7 +145,6 @@ This project demonstrates how enterprise AI assistants such as ChatGPT with cust
  Document Metadata   Extract Text
 
                         │
-
                         ▼
 
                   Chunking Service
@@ -117,7 +156,6 @@ This project demonstrates how enterprise AI assistants such as ChatGPT with cust
                Embedding Generation
 
                         │
-
                         ▼
 
                 Vector Similarity Search
@@ -165,9 +203,9 @@ This project demonstrates how enterprise AI assistants such as ChatGPT with cust
 
 ## Database
 
-PostgreSQL
+### PostgreSQL
 
-Stores:
+PostgreSQL stores application-level structured data such as:
 
 - Users
 - Projects
