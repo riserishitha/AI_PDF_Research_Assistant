@@ -1,593 +1,1259 @@
 # 📚 AI Research Assistant
 
-An AI-powered application that allows users to upload documents (PDFs) and interact with them through natural language using Retrieval-Augmented Generation (RAG).
+> **A production-style RAG application for uploading documents, understanding their content, and asking questions using natural language.**
 
-The goal of this project is not only to build a working application but also to understand how modern AI systems are designed and implemented from scratch.
+The **AI Research Assistant** is a full-stack AI application that allows users to upload PDF documents and interact with them through an intelligent conversational interface.
+
+The project is designed not only to build a functional application, but also to understand **how modern AI-powered knowledge assistants work internally** — from authentication and document ingestion to embeddings, vector search, retrieval, prompt construction, and LLM-generated responses.
 
 ---
 
-# 🎯 Project Goal
+## 🎯 Project Vision
 
-Build a production-style AI application that teaches:
+Build a production-oriented AI research assistant that demonstrates how systems such as document chat assistants, enterprise knowledge bases, and custom-document AI tools are architected.
 
-- Backend Development
-- Frontend Development
-- PostgreSQL
-- Vector Databases
-- Large Language Models (LLMs)
+### What this project will teach
+
+- Full-stack application development
+- Modern React/Next.js architecture
+- REST API development with FastAPI
+- PostgreSQL database design
+- Authentication and authorization
+- PDF processing and text extraction
+- Document chunking and metadata management
+- Embeddings and semantic search
+- Vector databases
 - Retrieval-Augmented Generation (RAG)
-- Docker
-- Authentication
-- AI Deployment Concepts
-
-By the end of this project, you'll understand how tools like ChatGPT with custom documents, Notion AI, and enterprise knowledge assistants work internally.
+- LLM integration
+- Conversational AI
+- Streaming responses
+- Docker and containerization
+- Production deployment concepts
+- AI application architecture
 
 ---
 
-# 🚀 Features
+# 🚀 Core Features
 
-## User Features
+## 👤 User Management
 
-- User Registration/Login
-- Secure Authentication
-- Upload PDF documents
-- View uploaded documents
-- Chat with uploaded documents
-- AI-generated summaries
-- Ask questions from documents
-- Chat history
-- Multiple document support
-- Delete documents
+- User registration and login
+- Secure authentication
+- Protected routes
 - User profile
+- User-specific documents and conversations
+- Session management
+
+## 📄 Document Management
+
+- Upload PDF documents
+- Multiple document support
+- View uploaded documents
+- Document metadata
+- Delete documents
+- Document processing status
+- Search and filter documents
+
+## 🤖 AI Capabilities
+
+- Chat with uploaded documents
+- Ask questions about document content
+- Generate document summaries
+- Context-aware responses
+- Semantic document search
+- Source/reference retrieval
+- Conversation history
+- Streaming AI responses
+- Markdown-formatted answers
+
+## ⚙️ Production Features
+
+- Responsive UI
+- Dark mode
+- Loading states
+- Error handling
+- API validation
+- Environment-based configuration
+- Database migrations
+- Dockerized services
+- Deployment-ready architecture
 
 ---
 
-# 🏗 System Architecture
+# 🏗️ System Architecture
 
-                    Browser
-
-                        │
-
-                        ▼
-
-            Next.js Frontend (React)
-
-                        │
-
-             REST API (FastAPI)
-
-                        │
-
-        ┌───────────────┼────────────────┐
-
-        ▼               ▼                ▼
-
- PostgreSQL        LangChain        Object Storage
-
-        │               │                │
-
-        ▼               ▼                ▼
-
- User Data      Embedding Model       PDF Files
-
-                        │
-
-                        ▼
-
-                 Vector Database
-
-                     (Qdrant)
-
-                        │
-
-                        ▼
-
-                  Gemini/OpenAI API
+```text
+                         ┌──────────────────────┐
+                         │      Browser         │
+                         │   Next.js / React    │
+                         └──────────┬───────────┘
+                                    │
+                                    │ REST API
+                                    ▼
+                         ┌──────────────────────┐
+                         │       FastAPI        │
+                         │      Backend         │
+                         └──────────┬───────────┘
+                                    │
+                 ┌──────────────────┼──────────────────┐
+                 │                  │                  │
+                 ▼                  ▼                  ▼
+        ┌────────────────┐  ┌────────────────┐  ┌────────────────┐
+        │  PostgreSQL    │  │   AI / RAG     │  │ Object Storage │
+        │                │  │    Pipeline    │  │                │
+        │ Users          │  │ LangChain      │  │ PDF Files      │
+        │ Documents      │  │ Embeddings     │  │ MinIO / S3     │
+        │ Chats          │  │ Retrieval      │  │                │
+        │ Messages       │  │ Prompting      │  │                │
+        └────────────────┘  └───────┬────────┘  └────────────────┘
+                                    │
+                                    ▼
+                           ┌──────────────────┐
+                           │      Qdrant      │
+                           │  Vector Database │
+                           └────────┬─────────┘
+                                    │
+                                    ▼
+                           ┌──────────────────┐
+                           │       LLM        │
+                           │ Gemini / OpenAI  │
+                           └──────────────────┘
+```
 
 ---
 
-# 🛠 Tech Stack
+# 🔄 RAG Pipeline
+
+The core intelligence of the application is based on **Retrieval-Augmented Generation (RAG)**.
+
+Instead of sending an entire PDF directly to an LLM, the application first processes the document and retrieves only the most relevant information.
+
+```text
+                    PDF Upload
+                        │
+                        ▼
+                 Extract Text
+                        │
+                        ▼
+                  Clean Text
+                        │
+                        ▼
+                 Split into Chunks
+                        │
+                        ▼
+                 Generate Embeddings
+                        │
+                        ▼
+                  Store in Qdrant
+                        │
+                        │
+             ┌──────────┴──────────┐
+             │                     │
+             ▼                     │
+       User Question               │
+             │                     │
+             ▼                     │
+      Generate Query Embedding     │
+             │                     │
+             ▼                     │
+       Semantic Search ────────────┘
+             │
+             ▼
+       Relevant Chunks
+             │
+             ▼
+      Build Context Prompt
+             │
+             ▼
+             LLM
+             │
+             ▼
+       Generated Answer
+             │
+             ▼
+      Sources / References
+```
+
+### Why RAG?
+
+Traditional LLM applications can struggle when the required information is outside the model's training data or when the user wants answers grounded in private documents.
+
+RAG solves this by combining:
+
+**Retrieval + Context + Generation**
+
+The model receives relevant document content at query time and generates an answer based on that retrieved context.
+
+---
+
+# 🛠️ Technology Stack
 
 ## Frontend
 
-- Next.js
-- React
-- TypeScript
-- Tailwind CSS
-- Shadcn UI
-- React Query
-- Axios
+| Technology | Purpose |
+|---|---|
+| **Next.js** | React framework and application architecture |
+| **React** | UI development |
+| **TypeScript** | Type-safe frontend development |
+| **Tailwind CSS** | Styling |
+| **shadcn/ui** | Reusable UI components |
+| **React Query** | Server-state management |
+| **Axios** | HTTP client |
 
-Why?
+### Why Next.js?
 
-- Learn the latest React ecosystem.
-- Server Components.
-- Routing.
-- Production-ready UI.
+This project uses Next.js to learn:
+
+- Modern React architecture
+- Routing
+- Layouts
+- Server and client components
+- API integration
+- Production-oriented frontend patterns
 
 ---
 
 ## Backend
 
-- FastAPI
-- Python
-- SQLAlchemy
-- Alembic
-- Pydantic
+| Technology | Purpose |
+|---|---|
+| **FastAPI** | REST API framework |
+| **Python** | Backend and AI development |
+| **SQLAlchemy** | ORM |
+| **Alembic** | Database migrations |
+| **Pydantic** | Data validation |
 
-Why?
+### Why FastAPI?
 
-- Industry-standard backend for AI applications.
-- Async support.
-- Fast performance.
-- Excellent documentation.
+FastAPI is well suited for AI applications because it provides:
+
+- High-performance APIs
+- Async support
+- Automatic OpenAPI documentation
+- Strong request/response validation
+- Excellent Python ecosystem integration
 
 ---
 
 ## Database
 
-PostgreSQL
+### PostgreSQL
 
-Stores:
+PostgreSQL stores application-level structured data such as:
 
 - Users
+- Documents
 - Chats
 - Messages
 - Document metadata
 - User settings
+- Processing status
+
+Example relationship:
+
+```text
+User
+ │
+ ├── Documents
+ │      │
+ │      └── Document Chunks → Qdrant
+ │
+ └── Chats
+        │
+        └── Messages
+```
 
 ---
 
 ## Vector Database
 
-Qdrant
+### Qdrant
 
-Stores:
+Qdrant stores vector embeddings generated from document chunks.
 
-- Embeddings
-- Semantic search index
+Instead of relying only on keyword matching, vector search allows the application to retrieve content based on **semantic similarity**.
 
-Purpose:
+Example:
 
-Instead of searching words, it searches meanings.
+```text
+Question:
+"How does the company handle employee leave?"
+
+Relevant document:
+"Employees are entitled to 20 days of annual paid vacation..."
+```
+
+Even though the words are not identical, their meanings are related.
 
 ---
 
 ## AI Framework
 
-LangChain
+### LangChain
 
-Used for:
+LangChain will be used for common RAG and LLM application components:
 
-- Prompt templates
-- Chains
-- Retrievers
 - Document loaders
-- Output parsers
+- Text splitters
+- Prompt templates
+- Retrievers
+- Model integration
+- Output parsing
+- RAG chains
+
+> The project will also emphasize understanding the underlying concepts rather than treating LangChain as a black box.
 
 ---
 
-## LLM
+## Large Language Model
 
-Gemini API (initially)
+### Initial Model
 
-Later we can support:
+**Google Gemini API**
 
-- OpenAI
-- Claude
-- Local models (Ollama)
+Future support may include:
+
+- OpenAI models
+- Anthropic Claude
+- Local models
+- Ollama
+
+The application should eventually use a model abstraction layer so that the LLM provider can be changed without rewriting the entire application.
 
 ---
 
 ## Authentication
 
-Clerk
+### Clerk
 
-Why?
+Clerk will initially handle:
 
-- Easy integration
-- Social login support
-- Secure authentication
+- User registration
+- Login
+- Logout
+- Session management
+- Social authentication
+- Protected routes
 
 ---
 
-## File Storage
+## Object Storage
 
-MinIO
+### MinIO
 
-Stores:
+MinIO will be used for storing uploaded PDF files.
 
-- PDFs
+```text
+User
+ │
+ ▼
+Upload PDF
+ │
+ ▼
+MinIO / S3-compatible storage
+ │
+ └── Original PDF
+```
 
-Why?
-
-Industry-standard object storage compatible with Amazon S3 APIs.
+This keeps binary files separate from PostgreSQL while PostgreSQL stores document metadata.
 
 ---
 
 ## Deployment
 
-Docker
+### Development
 
-Docker Compose
+- Docker
+- Docker Compose
+- Environment variables
 
-Future:
+### Future Deployment Options
 
 - Railway
 - Render
 - AWS
+- Other cloud platforms
+
+The architecture will keep application configuration environment-based so that local and production deployments can use different infrastructure without changing application code.
 
 ---
 
 # 📂 Project Structure
 
+```text
 AI-Research-Assistant/
+│
+├── frontend/
+│   ├── app/
+│   ├── components/
+│   ├── hooks/
+│   ├── lib/
+│   ├── services/
+│   └── types/
+│
+├── backend/
+│   ├── app/
+│   │   ├── api/
+│   │   ├── core/
+│   │   ├── db/
+│   │   ├── models/
+│   │   ├── schemas/
+│   │   ├── services/
+│   │   ├── rag/
+│   │   └── main.py
+│   │
+│   ├── tests/
+│   └── requirements.txt
+│
+├── docker/
+│   └── docker-compose.yml
+│
+├── database/
+│   └── migrations/
+│
+├── docs/
+│   ├── architecture/
+│   ├── api/
+│   └── ai-concepts/
+│
+├── assets/
+│
+├── .env.example
+├── .gitignore
+└── README.md
+```
 
-    frontend/
+---
 
-    backend/
+# 🗄️ Database Design
 
-    docker/
+The initial relational database will contain the following entities:
 
-    docs/
+```text
+┌──────────────┐
+│    Users     │
+└──────┬───────┘
+       │
+       │ 1:N
+       ▼
+┌──────────────┐
+│  Documents   │
+└──────┬───────┘
+       │
+       │ 1:N
+       ▼
+┌──────────────┐
+│ Document     │
+│ Metadata     │
+└──────────────┘
 
-    database/
 
-    assets/
+┌──────────────┐
+│    Users     │
+└──────┬───────┘
+       │
+       │ 1:N
+       ▼
+┌──────────────┐
+│    Chats     │
+└──────┬───────┘
+       │
+       │ 1:N
+       ▼
+┌──────────────┐
+│   Messages   │
+└──────────────┘
+```
 
-    README.md
+Qdrant will separately contain the vector representation of document chunks.
+
+---
+
+# 🔐 Security Model
+
+The application will follow a user-isolated data model.
+
+```text
+Authenticated User
+        │
+        ▼
+   Authorization
+        │
+        ▼
+User-specific resources
+        │
+ ┌──────┼───────┐
+ ▼      ▼       ▼
+Docs   Chats   Profile
+```
+
+Important security considerations:
+
+- Authentication on protected endpoints
+- Authorization checks for resources
+- User-level document isolation
+- Secure environment variables
+- API validation
+- File upload validation
+- Controlled file types and sizes
+- Secrets excluded from Git
+- Production HTTPS
+- Safe error responses
 
 ---
 
 # 📅 Development Roadmap
 
-## Phase 0
+## Phase 0 — Planning & Architecture
 
-Planning
+**Goal:** Understand the system before implementing it.
 
-Goal
+### Topics
 
-Understand every technology before writing code.
-
-Deliverables
-
-- Architecture diagram
-- Database schema
-- API planning
+- Application architecture
+- Database design
+- API design
+- RAG architecture
 - UI planning
 - Folder structure
 
-Status
+### Deliverables
 
-Not Started
+- Architecture diagram
+- Database schema
+- API specification
+- UI wireframes
+- Project structure
+
+**Status:** 🟡 Not Started
 
 ---
 
-## Phase 1
+## Phase 1 — Frontend Foundation
 
-Frontend Foundation
-
-Topics
+### Topics
 
 - Next.js
+- React
+- TypeScript
 - Routing
 - Layouts
 - Components
-- Tailwind
-- Shadcn UI
+- Tailwind CSS
+- shadcn/ui
 
-Deliverables
+### Deliverables
 
-- Landing Page
-- Login Page
-- Dashboard UI
-- Upload Screen
-- Chat Screen
+- Landing page
+- Login page
+- Dashboard
+- Document upload interface
+- Document list
+- Chat interface
 
-Status
-
-Pending
+**Status:** ⚪ Pending
 
 ---
 
-## Phase 2
+## Phase 2 — Backend Foundation
 
-Backend Foundation
-
-Topics
+### Topics
 
 - FastAPI
 - REST APIs
-- Dependency Injection
-- Validation
+- Routers
+- Dependency injection
+- Request validation
+- Response models
 - Async APIs
+- API documentation
 
-Deliverables
+### Deliverables
 
-- FastAPI Server
-- API Documentation
+- FastAPI server
+- Health-check endpoint
+- API routers
 - CRUD APIs
+- OpenAPI documentation
 
-Status
-
-Pending
+**Status:** ⚪ Pending
 
 ---
 
-## Phase 3
+## Phase 3 — PostgreSQL
 
-Database
+### Topics
 
-Topics
-
+- Relational database design
+- SQL
 - PostgreSQL
 - SQLAlchemy
 - Alembic
+- Relationships
+- Transactions
+- Indexes
 
-Tables
+### Initial Tables
 
-Users
+- Users
+- Documents
+- Chats
+- Messages
 
-Documents
-
-Chats
-
-Messages
-
-Status
-
-Pending
+**Status:** ⚪ Pending
 
 ---
 
-## Phase 4
+## Phase 4 — Authentication
 
-Authentication
-
-Topics
+### Topics
 
 - Clerk
-- Session Management
-- Protected Routes
+- Authentication
+- Authorization
+- Sessions
+- Protected routes
+- User identity
 
-Deliverables
+### Deliverables
 
 - Signup
 - Login
 - Logout
+- Protected dashboard
+- Authenticated API requests
 
-Status
-
-Pending
+**Status:** ⚪ Pending
 
 ---
 
-## Phase 5
+## Phase 5 — Document Processing
 
-Document Processing
+### Topics
 
-Topics
-
-- PDF Parsing
+- PDF parsing
+- Text extraction
+- Text cleaning
 - Chunking
-- Cleaning
 - Metadata
+- File validation
+- Object storage
 
-Pipeline
+### Pipeline
 
+```text
 PDF
-
-↓
-
+ │
+ ▼
 Extract Text
+ │
+ ▼
+Clean Text
+ │
+ ▼
+Split into Chunks
+ │
+ ▼
+Attach Metadata
+ │
+ ▼
+Store / Index
+```
 
-↓
-
-Clean
-
-↓
-
-Chunk
-
-↓
-
-Store
-
-Status
-
-Pending
+**Status:** ⚪ Pending
 
 ---
 
-## Phase 6
+## Phase 6 — Embeddings
 
-Embeddings
-
-Topics
+### Topics
 
 - What are embeddings?
+- Vector representations
 - Embedding models
+- Cosine similarity
 - Semantic similarity
+- Vector indexing
 
-Pipeline
+### Pipeline
 
+```text
 Text Chunk
-
-↓
-
+    │
+    ▼
 Embedding Model
-
-↓
-
+    │
+    ▼
 Vector
-
-↓
-
+    │
+    ▼
 Qdrant
+```
 
-Status
-
-Pending
+**Status:** ⚪ Pending
 
 ---
 
-## Phase 7
+## Phase 7 — RAG Implementation
 
-Retrieval-Augmented Generation (RAG)
+### Topics
 
-Topics
+- Vector search
+- Retrieval
+- Top-K results
+- Prompt templates
+- Context injection
+- Grounded generation
+- Retrieval quality
 
-- Vector Search
-- Retriever
-- Prompt Template
-- Context Injection
+### Query Flow
 
-Flow
-
-Question
-
-↓
-
-Embedding
-
-↓
-
-Similarity Search
-
-↓
-
-Relevant Chunks
-
-↓
-
+```text
+User Question
+      │
+      ▼
+Query Embedding
+      │
+      ▼
+Qdrant Similarity Search
+      │
+      ▼
+Top-K Relevant Chunks
+      │
+      ▼
+Context Construction
+      │
+      ▼
+Prompt
+      │
+      ▼
 LLM
-
-↓
-
+      │
+      ▼
 Answer
+```
 
-Status
-
-Pending
-
----
-
-## Phase 8
-
-Chat System
-
-Topics
-
-- Conversation Memory
-- Streaming Responses
-- Markdown Rendering
-
-Deliverables
-
-- AI Chat
-- History
-- References
-
-Status
-
-Pending
+**Status:** ⚪ Pending
 
 ---
 
-## Phase 9
+## Phase 8 — Chat System
 
-Production Features
+### Topics
 
-- Multiple Documents
+- Conversation state
+- Chat history
+- Message persistence
+- Streaming responses
+- Markdown rendering
+- Source references
+
+### Deliverables
+
+- AI chat
+- Chat history
+- Streaming responses
+- Document references
+
+**Status:** ⚪ Pending
+
+---
+
+## Phase 9 — Production Features
+
+### Features
+
+- Multiple document collections
 - Search
 - Filters
-- Dark Mode
-- Mobile Responsive
-- Loading States
-- Error Handling
+- Dark mode
+- Responsive design
+- Loading states
+- Error boundaries
+- Retry mechanisms
+- Empty states
+- File validation
+- Observability basics
 
-Status
-
-Pending
-
----
-
-## Phase 10
-
-Deployment
-
-Docker
-
-Docker Compose
-
-Deployment
-
-Environment Variables
-
-Status
-
-Pending
+**Status:** ⚪ Pending
 
 ---
 
-# 📖 AI Concepts We'll Learn
+## Phase 10 — Deployment
 
-## AI Fundamentals
+### Topics
 
-- What is AI?
-- Machine Learning vs Deep Learning
+- Docker
+- Docker Compose
+- Environment variables
+- Production configuration
+- Database migrations
+- Cloud deployment
+- Logging
+- Monitoring
+
+**Status:** ⚪ Pending
+
+---
+
+# 🧠 AI Concepts We'll Learn
+
+## 1. AI Fundamentals
+
+- Artificial Intelligence
+- Machine Learning
+- Deep Learning
 - Generative AI
-- Large Language Models (LLMs)
+- Large Language Models
 
 ---
 
-## Prompt Engineering
+## 2. LLM Fundamentals
 
-- Prompts
-- Temperature
 - Tokens
-- Context Window
-- Hallucination
+- Context windows
+- Temperature
+- System prompts
+- User prompts
+- Model parameters
+- Hallucinations
+- Inference
 
 ---
 
-## Embeddings
+## 3. Prompt Engineering
 
-- Vector Representation
-- Similarity Search
-- Cosine Similarity
+Learn how prompts influence model behavior:
+
+```text
+System Instructions
+        +
+User Question
+        +
+Retrieved Context
+        ↓
+       LLM
+        ↓
+    Response
+```
 
 ---
 
-## Retrieval-Augmented Generation
+## 4. Embeddings
 
-- Chunking
+Understand how text can be represented numerically.
+
+```text
+"Machine learning is useful"
+              │
+              ▼
+       Embedding Model
+              │
+              ▼
+[0.12, -0.44, 0.81, ...]
+```
+
+Topics:
+
+- Vector representation
+- Semantic similarity
+- Cosine similarity
+- Embedding dimensions
+- Embedding models
+
+---
+
+## 5. Vector Search
+
+Understand how vector databases retrieve semantically related content.
+
+Topics:
+
+- Similarity search
+- Top-K retrieval
+- Distance metrics
+- Vector indexes
+- Metadata filtering
+
+---
+
+## 6. Retrieval-Augmented Generation
+
+RAG combines retrieval with generation.
+
+```text
+        Knowledge Base
+              │
+              ▼
+         Retrieval
+              │
+              ▼
+       Relevant Context
+              │
+              ▼
+        LLM Generation
+              │
+              ▼
+           Answer
+```
+
+Topics:
+
+- Document chunking
 - Retrieval
-- Context Building
-- Prompt Construction
+- Context construction
+- Prompt construction
+- Grounding
+- Source attribution
+- Retrieval quality
 
 ---
 
-## LangChain
+## 7. LangChain
 
-- Chains
+Learn:
+
+- Document loaders
+- Text splitters
+- Prompt templates
 - Retrievers
-- Loaders
-- Memory
-- Output Parsers
+- Chains
+- Output parsers
+- Model integrations
+
+The objective is to understand the concepts behind each component instead of depending entirely on framework abstractions.
 
 ---
 
-## Databases
+# 🆚 PostgreSQL vs Qdrant
 
-Relational Database
+The project intentionally uses both a relational database and a vector database.
 
+| Requirement | PostgreSQL | Qdrant |
+|---|---|---|
+| User records | ✅ | ❌ |
+| Chat records | ✅ | ❌ |
+| Messages | ✅ | ❌ |
+| Document metadata | ✅ | ❌ |
+| Text relationships | ✅ | ❌ |
+| Embeddings | ❌ | ✅ |
+| Semantic search | ❌ | ✅ |
+| Vector similarity | ❌ | ✅ |
+| Structured queries | ✅ | Limited |
+
+### Simple rule
+
+**PostgreSQL answers:**  
+> "What data belongs to this user?"
+
+**Qdrant answers:**  
+> "Which document chunks are most similar to this question?"
+
+---
+
+# 🔌 API Design
+
+The backend will expose REST APIs similar to:
+
+```text
+Authentication
+──────────────
+POST   /api/auth/...
+
+Documents
+─────────
+POST   /api/documents
+GET    /api/documents
+GET    /api/documents/{id}
+DELETE /api/documents/{id}
+
+Chat
+────
+POST   /api/chats
+GET    /api/chats
+GET    /api/chats/{id}
+POST   /api/chats/{id}/messages
+
+AI
+──
+POST   /api/ask
+POST   /api/documents/{id}/summarize
+
+Health
+──────
+GET    /health
+```
+
+The exact API contract will be finalized during **Phase 0**.
+
+---
+
+# 🌱 Environment Variables
+
+A `.env.example` file will document required configuration without exposing real secrets.
+
+Example:
+
+```env
+# Application
+APP_ENV=development
+API_HOST=0.0.0.0
+API_PORT=8000
+
+# PostgreSQL
+DATABASE_URL=
+
+# Qdrant
+QDRANT_URL=
+QDRANT_API_KEY=
+
+# Object Storage
+MINIO_ENDPOINT=
+MINIO_ACCESS_KEY=
+MINIO_SECRET_KEY=
+MINIO_BUCKET=
+
+# Authentication
+CLERK_SECRET_KEY=
+
+# LLM
+GEMINI_API_KEY=
+```
+
+> Never commit real API keys, passwords, tokens, or secrets to Git.
+
+---
+
+# 🧪 Testing Strategy
+
+Testing will be introduced throughout development instead of being left until the end.
+
+### Backend
+
+- Unit tests
+- API tests
+- Validation tests
+- Authentication tests
+- RAG pipeline tests
+
+### Frontend
+
+- Component tests
+- UI interaction tests
+- API integration tests
+
+### AI/RAG
+
+- Retrieval tests
+- Context relevance checks
+- Answer grounding checks
+- Regression test questions
+
+---
+
+# 📊 Future Improvements
+
+Once the core application is working, the project can evolve into a more advanced AI platform.
+
+### RAG Improvements
+
+- Hybrid search
+- Reranking
+- Query rewriting
+- Metadata filtering
+- Multi-query retrieval
+- Parent-child retrieval
+- Better chunking strategies
+
+### AI Improvements
+
+- Multiple LLM providers
+- Local LLM support
+- Agentic workflows
+- Structured outputs
+- Tool calling
+- Citation generation
+
+### Platform Improvements
+
+- Document collections
+- Team workspaces
+- Role-based access control
+- Usage analytics
+- Background processing
+- Job queues
+- Observability
+- Rate limiting
+
+---
+
+# 🎓 Learning Outcomes
+
+By completing this project, I will understand how to build an AI application from the ground up.
+
+### Software Engineering
+
+- Frontend architecture
+- Backend architecture
+- REST APIs
+- Authentication
+- Database design
+- API validation
+- Testing
+- Deployment
+
+### Data & AI
+
+- PDF processing
+- Text preprocessing
+- Embeddings
+- Vector databases
+- Semantic search
+- RAG
+- Prompt engineering
+- LLM integration
+- Retrieval evaluation
+
+### Infrastructure
+
+- Docker
+- Docker Compose
+- Environment configuration
+- Object storage
+- Database migrations
+- Cloud deployment concepts
+
+---
+
+# 🗺️ Project Milestones
+
+```text
+Planning
+   │
+   ▼
+Frontend
+   │
+   ▼
+Backend
+   │
+   ▼
 PostgreSQL
-
-Vector Database
-
+   │
+   ▼
+Authentication
+   │
+   ▼
+PDF Processing
+   │
+   ▼
+Embeddings
+   │
+   ▼
 Qdrant
-
-Difference between relational and vector databases.
+   │
+   ▼
+RAG
+   │
+   ▼
+Chat
+   │
+   ▼
+Production Features
+   │
+   ▼
+Deployment
+```
 
 ---
+
+# 📌 Current Status
+
+**Project:** AI Research Assistant
+
+**Stage:** 🟡 Planning
+
+**Primary Goal:** Build and understand a complete production-style RAG application from the ground up.
+
+### Current focus
+
+- [ ] Finalize architecture
+- [ ] Design PostgreSQL schema
+- [ ] Define API contracts
+- [ ] Plan frontend pages
+- [ ] Set up repository structure
+- [ ] Define development environment
+- [ ] Start Phase 1
+
+---
+
+# 📚 Documentation
+
+Project documentation will be maintained under:
+
+```text
+docs/
+├── architecture/
+├── api/
+└── ai-concepts/
+```
+
+Planned documentation includes:
+
+- Architecture decisions
+- Database schema
+- API documentation
+- RAG explanations
+- Embedding experiments
+- Retrieval experiments
+- Deployment notes
+- Troubleshooting guides
+
+---
+
+# 🚧 Project Philosophy
+
+This project is intentionally built as a **learning-first production-style application**.
+
+The goal is not simply:
+
+> "Make an AI chatbot."
+
+The goal is to understand:
+
+> **How does an AI system ingest knowledge, retrieve relevant information, provide context to an LLM, generate an answer, and deliver that answer through a scalable full-stack application?**
+
+Every major technology should be understood at both the **conceptual** and **implementation** level.
+
+---
+
+# ⭐ End Goal
+
+The final application should provide a seamless experience:
+
+```text
+Upload a PDF
+      ↓
+Process the document
+      ↓
+Create embeddings
+      ↓
+Index document chunks
+      ↓
+Ask a question
+      ↓
+Retrieve relevant information
+      ↓
+Send grounded context to the LLM
+      ↓
+Generate an answer
+      ↓
+Show the answer with references
+```
+
+The result will be a complete **AI Research Assistant** demonstrating modern full-stack development, RAG architecture, vector search, LLM integration, authentication, databases, and deployment concepts.
+
+---
+
+## 📜 License
+
+This project is intended for learning, experimentation, and portfolio development.
